@@ -3,13 +3,11 @@
 namespace App\Form;
 
 use App\Command\CreateUserCommand;
-use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class CreateUserFormType extends AbstractType
 {
@@ -18,11 +16,16 @@ class CreateUserFormType extends AbstractType
         $builder
             ->add('userId')
             ->add('plainPassword', PasswordType::class, [
-                // instead of being set onto the object directly,
-                // this is read and encoded in the controller
                 'mapped' => false,
-
-
+                'constraints' => [
+                    new Assert\Length([
+                        'min' => 5,
+                        'minMessage' => 'The password must be at least 4 characters long',
+                    ]),
+                    new Assert\NotBlank([
+                        'message' => 'Password cannot be blank',
+                    ]),
+                ],
             ])
         ;
     }
