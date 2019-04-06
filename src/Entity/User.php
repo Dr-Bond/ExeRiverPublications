@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -75,11 +77,17 @@ class User implements UserInterface
      */
     private $country;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Book", mappedBy="author", orphanRemoval=true)
+     */
+    private $books;
+
     public function __construct($firstName, $surname)
     {
         $this->firstName = $firstName;
         $this->surname = $surname;
         $this->userId = substr(md5(microtime()),rand(0,26),5);
+        $this->books = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -115,7 +123,6 @@ class User implements UserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
@@ -254,5 +261,35 @@ class User implements UserInterface
     {
         // if you had a plainPassword property, you'd nullify it here
         // $this->plainPassword = null;
+    }
+
+    /**
+     * @return Collection|Book[]
+     */
+    public function getBooks(): Collection
+    {
+        return $this->books;
+    }
+
+    public function addBook(Book $book): self
+    {
+        if (!$this->books->contains($book)) {
+            $this->books[] = $book;
+            $book->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBook(Book $book): self
+    {
+        if ($this->books->contains($book)) {
+            $this->books->removeElement($book);
+            if ($book->getAuthor() === $this) {
+                $book->setAuthor(null);
+            }
+        }
+
+        return $this;
     }
 }
