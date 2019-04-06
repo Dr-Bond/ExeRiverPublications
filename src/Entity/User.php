@@ -10,7 +10,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @UniqueEntity(fields={"userId"}, message="There is already an account with this userId")
  */
-class User
+class User implements UserInterface
 {
     /**
      * @ORM\Id()
@@ -74,6 +74,13 @@ class User
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $country;
+
+    public function __construct($firstName, $surname)
+    {
+        $this->firstName = $firstName;
+        $this->surname = $surname;
+        $this->userId = substr(md5(microtime()),rand(0,26),5);
+    }
 
     public function getId(): ?int
     {
@@ -227,5 +234,25 @@ class User
         $this->country = $country;
 
         return $this;
+    }
+
+    /**
+     * Return null - salt not used in password creation
+     *
+     * {@inheritdoc}
+     */
+    public function getSalt(): ?string
+    {
+        return null;
+    }
+    /**
+     * Clear plain password.
+     *
+     * {@inheritdoc}
+     */
+    public function eraseCredentials(): void
+    {
+        // if you had a plainPassword property, you'd nullify it here
+        // $this->plainPassword = null;
     }
 }
