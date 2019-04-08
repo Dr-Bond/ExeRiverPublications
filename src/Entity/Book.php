@@ -173,31 +173,31 @@ class Book
         return $this;
     }
 
-    public function getAuthor(): ?user
+    public function getAuthor(): ?User
     {
         return $this->author;
     }
 
-    public function setAuthor(?user $author): self
+    public function setAuthor(?User $author): self
     {
         $this->author = $author;
 
         return $this;
     }
 
-    public function getAgent(): ?user
+    public function getAgent(): ?User
     {
         return $this->agent;
     }
 
-    public function setAgent(?user $agent): self
+    public function setAgent(?User $agent): self
     {
         $this->agent = $agent;
 
         return $this;
     }
 
-    public function getMainReviewer(): ?user
+    public function getMainReviewer(): ?User
     {
         return $this->mainReviewer;
     }
@@ -233,12 +233,12 @@ class Book
         return $this;
     }
 
-    public function getSecondaryReviewer(): ?user
+    public function getSecondaryReviewer(): ?User
     {
         return $this->secondaryReviewer;
     }
 
-    public function setSecondaryReviewer(?user $secondaryReviewer): self
+    public function setSecondaryReviewer(?User $secondaryReviewer): self
     {
         $this->secondaryReviewer = $secondaryReviewer;
 
@@ -269,12 +269,12 @@ class Book
         return $this;
     }
 
-    public function getEditor(): ?user
+    public function getEditor(): ?User
     {
         return $this->editor;
     }
 
-    public function setEditor(?user $editor): self
+    public function setEditor(?User $editor): self
     {
         $this->editor = $editor;
 

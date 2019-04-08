@@ -4,23 +4,23 @@ namespace App\CommandHandler;
 
 use App\Command\UploadManuscriptCommand;
 use App\Entity\Manuscript;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Helper\Orm;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class UploadManuscriptCommandHandler
 {
-    private $entityManager;
+    private $orm;
     private $params;
 
-    public function __construct(EntityManagerInterface $entityManager, ParameterBagInterface $params)
+    public function __construct(Orm $orm, ParameterBagInterface $params)
     {
-        $this->entityManager = $entityManager;
+        $this->orm = $orm;
         $this->params = $params;
     }
 
     public function __invoke(UploadManuscriptCommand $command)
     {
-        $entityManager = $this->entityManager;
+        $orm = $this->orm;
         $manuscript = new Manuscript();
 
         $file = $command->getLocation();
@@ -29,7 +29,7 @@ class UploadManuscriptCommandHandler
         $manuscript->setReference($command->getReference());
         $manuscript->setName($command->getName());
         $manuscript->setLocation($fileName);
-        $entityManager->persist($manuscript);
-        $entityManager->flush();
+        $orm->persist($manuscript);
+        $orm->flush();
     }
 }

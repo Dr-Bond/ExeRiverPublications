@@ -6,15 +6,30 @@
     <h1>Create User</h1>
     {{ form_start(form) }}
     {{ form_errors(form) }}
-        {{ form_row(form.firstName) }}
-        {{ form_row(form.surname) }}
-        {{ form_row(form.plainPassword) }}
-        {{ form_row(form.addressLineOne) }}
-        {{ form_row(form.addressLineTwo) }}
-        {{ form_row(form.city) }}
-        {{ form_row(form.county) }}
-        {{ form_row(form.postcode) }}
-        {{ form_row(form.country) }}
+    <div class="card">
+        <div class="card-header">
+            User
+        </div>
+        <div class="card-body">
+            {{ form_row(form.firstName) }}
+            {{ form_row(form.surname) }}
+            {{ form_row(form.plainPassword) }}
+            {{ form_row(form.role) }}
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+            Address
+        </div>
+        <div class="card-body">
+            {{ form_row(form.addressLineOne) }}
+            {{ form_row(form.addressLineTwo) }}
+            {{ form_row(form.city) }}
+            {{ form_row(form.county) }}
+            {{ form_row(form.postcode) }}
+            {{ form_row(form.country) }}
+        </div>
+    </div>
         {{ form_row(form.save) }}
     {{ form_end(form) }}
 {% endblock %}

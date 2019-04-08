@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Command\AddBookCommand;
+use App\Form\Type\AuthorType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -15,6 +16,7 @@ class AddBookFormType extends AbstractType
         $builder
             ->add('reference')
             ->add('name')
+            ->add('author', AuthorType::class)
             ->add('save', SubmitType::class, array('label' => 'Submit'))
         ;
     }

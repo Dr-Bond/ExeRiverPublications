@@ -11,55 +11,34 @@ class UploadManuscriptCommand
     private $name;
     private $location;
 
-    /**
-     * @return mixed
-     */
-    public function getReference()
+    public function getReference(): ?string
     {
         return $this->reference;
     }
 
-    /**
-     * @param mixed $reference
-     * @return UploadManuscriptCommand
-     */
-    public function setReference($reference)
+    public function setReference(?string $reference)
     {
         $this->reference = $reference;
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->name;
     }
 
-    /**
-     * @param mixed $name
-     * @return UploadManuscriptCommand
-     */
-    public function setName($name)
+    public function setName(?string $name)
     {
         $this->name = $name;
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getLocation()
+    public function getLocation(): ?string
     {
         return $this->location;
     }
 
-    /**
-     * @param mixed $location
-     * @return UploadManuscriptCommand
-     */
-    public function setLocation($location)
+    public function setLocation(?string $location)
     {
         $this->location = $location;
         return $this;

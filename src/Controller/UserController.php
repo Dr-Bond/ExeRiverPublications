@@ -14,7 +14,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class UserController extends AbstractController
 {
     /**
-     * @Route("/create-user", name="createUser")
+     * @Route("/user/create", name="createUser")
      */
     public function createUser(Request $request, MessageBusInterface $bus)
     {
@@ -32,7 +32,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/login", name="login")
+     * @Route("user/login", name="login")
      */
     public function login(AuthenticationUtils $authenticationUtils): Response
     {

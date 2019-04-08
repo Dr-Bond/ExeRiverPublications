@@ -3,41 +3,80 @@
 namespace App\CommandHandler;
 
 use App\Command\CreateUserCommand;
+use App\Entity\Address;
+use App\Entity\Role;
 use App\Entity\User;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Entity\UserRole;
+use App\Helper\Orm;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class CreateUserCommandHandler
 {
-    private $entityManager;
+    private $orm;
     private $passwordEncoder;
 
-    public function __construct(EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder)
+    public function __construct(Orm $orm, UserPasswordEncoderInterface $passwordEncoder)
     {
-        $this->entityManager = $entityManager;
+        $this->orm = $orm;
         $this->passwordEncoder = $passwordEncoder;
     }
 
     public function __invoke(CreateUserCommand $command)
     {
-        $entityManager = $this->entityManager;
+        $orm = $this->orm;
         $user = new User(
             $command->getFirstName(),
             $command->getSurname()
         );
-        $encoded = $this->passwordEncoder->encodePassword(
+        $user->setPassword($this->encodePassword($user, $command->getPlainPassword()));
+        $this->addAddress(
             $user,
-            $command->getPlainPassword()
+            ['address_line_1' => $command->getAddressLineOne(),
+            'address_line_2' => $command->getAddressLineTwo(),
+            'city' => $command->getCity(),
+            'county' => $command->getCounty(),
+            'postcode' => $command->getPostcode(),
+            'country' => $command->getCountry()
+            ]
         );
-        $user->setPassword($encoded);
-        $user->setAddressLineOne($command->getAddressLineOne());
-        $user->setAddressLineTwo($command->getAddressLineOne());
-        $user->setCity($command->getCity());
-        $user->setCounty($command->getCounty());
-        $user->setPostcode($command->getPostcode());
-        $user->setCountry($command->getCountry());
-        $entityManager->persist($user);
-        $entityManager->flush();
+        $this->addRole($user, $command->getRole());
+        $orm->persist($user);
+        $orm->flush();
+    }
+
+    private function addAddress(User $user, array $address)
+    {
+        $entity = new Address(
+            $user,
+            $address['address_line_1'],
+            $address['city'],
+            $address['county'],
+            $address['postcode'],
+            $address['country']
+        );
+        if(!empty($address['country'])) {
+            $entity->setAddressLineTwo($address['address_line_2']);
+        }
+        $this->orm->persist($entity);
+        return;
+    }
+
+    private function addRole(User $user, string $role)
+    {
+        $entity = new Role(
+            $user,
+            $role
+        );
+        $this->orm->persist($entity);
+        return;
+    }
+
+    private function encodePassword(User $user, string $password)
+    {
+        return $this->passwordEncoder->encodePassword(
+            $user,
+            $password
+        );
     }
 
 }

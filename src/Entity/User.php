@@ -14,6 +14,12 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class User implements UserInterface
 {
+    const ROLE_ADMIN = ['id' => 'ROLE_ADMIN', 'desc' => 'Admin'];
+    const ROLE_AGENT = ['id' => 'ROLE_AGENT', 'desc' => 'Agent'];
+    const ROLE_AUTHOR = ['id' => 'ROLE_AUTHOR', 'desc' => 'Author'];
+    const ROLE_EDITOR = ['id' => 'ROLE_EDITOR', 'desc' => 'Editor'];
+    const ROLE_REVIEWER = ['id' => 'ROLE_REVIEWER', 'desc' => 'Reviewer'];
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -25,11 +31,6 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=180, unique=true)
      */
     private $userId;
-
-    /**
-     * @ORM\Column(type="json")
-     */
-    private $roles = [];
 
     /**
      * @var string The hashed password
@@ -48,39 +49,19 @@ class User implements UserInterface
     private $surname;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $addressLineOne;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $addressLineTwo;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $city;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $county;
-
-    /**
-     * @ORM\Column(type="string", length=8, nullable=true)
-     */
-    private $postcode;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $country;
-
-    /**
      * @ORM\OneToMany(targetEntity="App\Entity\Book", mappedBy="author", orphanRemoval=true)
      */
     private $books;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Role", mappedBy="roles", orphanRemoval=true)
+     */
+    private $roles;
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Address", mappedBy="user", cascade={"persist", "remove"})
+     */
+    private $address;
 
     public function __construct($firstName, $surname)
     {
@@ -88,6 +69,7 @@ class User implements UserInterface
         $this->surname = $surname;
         $this->userId = substr(md5(microtime()),rand(0,26),5);
         $this->books = new ArrayCollection();
+        $this->roles = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -103,7 +85,6 @@ class User implements UserInterface
     public function setUserId(string $userId): self
     {
         $this->userId = $userId;
-
         return $this;
     }
 
@@ -117,24 +98,6 @@ class User implements UserInterface
         return (string) $this->userId;
     }
 
-    /**
-     * @see UserInterface
-     */
-    public function getRoles(): array
-    {
-        $roles = $this->roles;
-        $roles[] = 'ROLE_USER';
-
-        return array_unique($roles);
-    }
-
-    public function setRoles(array $roles): self
-    {
-        $this->roles = $roles;
-
-        return $this;
-    }
-
     public function getPassword(): string
     {
         return (string) $this->password;
@@ -143,7 +106,6 @@ class User implements UserInterface
     public function setPassword(string $password): self
     {
         $this->password = $password;
-
         return $this;
     }
 
@@ -155,7 +117,6 @@ class User implements UserInterface
     public function setFirstName(string $firstName): self
     {
         $this->firstName = $firstName;
-
         return $this;
     }
 
@@ -167,79 +128,6 @@ class User implements UserInterface
     public function setSurname(string $surname): self
     {
         $this->surname = $surname;
-
-        return $this;
-    }
-
-    public function getAddressLineOne(): ?string
-    {
-        return $this->addressLineOne;
-    }
-
-    public function setAddressLineOne(?string $addressLineOne): self
-    {
-        $this->addressLineOne = $addressLineOne;
-
-        return $this;
-    }
-
-    public function getAddressLineTwo(): ?string
-    {
-        return $this->addressLineTwo;
-    }
-
-    public function setAddressLineTwo(?string $addressLineTwo): self
-    {
-        $this->addressLineTwo = $addressLineTwo;
-
-        return $this;
-    }
-
-    public function getCity(): ?string
-    {
-        return $this->city;
-    }
-
-    public function setCity(?string $city): self
-    {
-        $this->city = $city;
-
-        return $this;
-    }
-
-    public function getCounty(): ?string
-    {
-        return $this->county;
-    }
-
-    public function setCounty(?string $county): self
-    {
-        $this->county = $county;
-
-        return $this;
-    }
-
-    public function getPostcode(): ?string
-    {
-        return $this->postcode;
-    }
-
-    public function setPostcode(?string $postcode): self
-    {
-        $this->postcode = $postcode;
-
-        return $this;
-    }
-
-    public function getCountry(): ?string
-    {
-        return $this->country;
-    }
-
-    public function setCountry(?string $country): self
-    {
-        $this->country = $country;
-
         return $this;
     }
 
@@ -271,25 +159,20 @@ class User implements UserInterface
         return $this->books;
     }
 
-    public function addBook(Book $book): self
+    /**
+     * @return Collection|Role[]
+     */
+    public function getRoles(): Collection
     {
-        if (!$this->books->contains($book)) {
-            $this->books[] = $book;
-            $book->setAuthor($this);
-        }
+        $roles = $this->roles;
+        $roles[] = 'ROLE_USER';
 
-        return $this;
+        return array_unique($roles);
     }
 
-    public function removeBook(Book $book): self
+    public function getAddress(): ?Address
     {
-        if ($this->books->contains($book)) {
-            $this->books->removeElement($book);
-            if ($book->getAuthor() === $this) {
-                $book->setAuthor(null);
-            }
-        }
-
-        return $this;
+        return $this->address;
     }
+
 }

@@ -10,6 +10,7 @@ class CreateUserCommand
     private $firstName;
     private $surname;
     private $plainPassword;
+    private $role;
     private $addressLineOne;
     private $addressLineTwo;
     private $city;
@@ -22,7 +23,7 @@ class CreateUserCommand
         return $this->firstName;
     }
 
-    public function setFirstName(string $firstName)
+    public function setFirstName(?string $firstName)
     {
         $this->firstName = $firstName;
         return $this;
@@ -33,7 +34,7 @@ class CreateUserCommand
         return $this->surname;
     }
 
-    public function setSurname(string $surname)
+    public function setSurname(?string $surname)
     {
         $this->surname = $surname;
         return $this;
@@ -44,9 +45,20 @@ class CreateUserCommand
         return $this->plainPassword;
     }
 
-    public function setPlainPassword(string $plainPassword)
+    public function setPlainPassword(?string $plainPassword)
     {
         $this->plainPassword = $plainPassword;
+        return $this;
+    }
+
+    public function getRole(): ?string
+    {
+        return $this->role;
+    }
+
+    public function setRole(?string $role)
+    {
+        $this->role = $role;
         return $this;
     }
 
@@ -55,7 +67,7 @@ class CreateUserCommand
         return $this->addressLineOne;
     }
 
-    public function setAddressLineOne(string $addressLineOne)
+    public function setAddressLineOne(?string $addressLineOne)
     {
         $this->addressLineOne = $addressLineOne;
         return $this;
@@ -66,7 +78,7 @@ class CreateUserCommand
         return $this->addressLineTwo;
     }
 
-    public function setAddressLineTwo(string $addressLineTwo)
+    public function setAddressLineTwo(?string $addressLineTwo)
     {
         $this->addressLineTwo = $addressLineTwo;
         return $this;
@@ -77,7 +89,7 @@ class CreateUserCommand
         return $this->city;
     }
 
-    public function setCity(string $city)
+    public function setCity(?string $city)
     {
         $this->city = $city;
         return $this;
@@ -88,7 +100,7 @@ class CreateUserCommand
         return $this->county;
     }
 
-    public function setCounty(string $county)
+    public function setCounty(?string $county)
     {
         $this->county = $county;
         return $this;
@@ -99,9 +111,9 @@ class CreateUserCommand
         return $this->postcode;
     }
 
-    public function setPostcode(string $postcode)
+    public function setPostcode(?string $postcode)
     {
-        $this->postcode = $postcode;
+        $this->postcode = strtoupper($postcode);
         return $this;
     }
 
@@ -110,7 +122,7 @@ class CreateUserCommand
         return $this->country;
     }
 
-    public function setCountry(string $country)
+    public function setCountry(?string $country)
     {
         $this->country = $country;
         return $this;
@@ -122,8 +134,14 @@ class CreateUserCommand
         $metadata->addPropertyConstraint('surname', new Assert\NotBlank());
         $metadata->addPropertyConstraint('plainPassword', new Assert\NotBlank());
         $metadata->addPropertyConstraint('plainPassword', new Assert\Length([
-            'min' => 5,
+            'min' => 4,
             'minMessage' => 'The password must be at least 4 characters long'
         ]));
+        $metadata->addPropertyConstraint('role', new Assert\NotBlank());
+        $metadata->addPropertyConstraint('addressLineOne', new Assert\NotBlank());
+        $metadata->addPropertyConstraint('city', new Assert\NotBlank());
+        $metadata->addPropertyConstraint('county', new Assert\NotBlank());
+        $metadata->addPropertyConstraint('postcode', new Assert\NotBlank());
+        $metadata->addPropertyConstraint('country', new Assert\NotBlank());
     }
 }

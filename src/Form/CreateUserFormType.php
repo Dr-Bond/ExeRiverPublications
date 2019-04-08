@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Command\CreateUserCommand;
+use App\Form\Type\RoleType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -20,6 +21,7 @@ class CreateUserFormType extends AbstractType
             ->add('plainPassword', PasswordType::class, [
                 'label' => 'Password'
             ])
+            ->add('role', RoleType::class)
             ->add('addressLineOne')
             ->add('addressLineTwo')
             ->add('city')
