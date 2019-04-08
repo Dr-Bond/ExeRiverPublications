@@ -3,22 +3,31 @@
 namespace App\Controller;
 
 use App\Command\AddBookCommand;
+use App\Entity\Book;
 use App\Form\AddBookFormType;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use phpDocumentor\Reflection\Types\Parent_;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 
-class BookController extends AbstractController
+class BookController extends BaseController
 {
+    public function __construct(Security $security)
+    {
+        parent::__construct($security);
+    }
+
     /**
      * @Route("/book", name="book")
      */
     public function index()
     {
+        $books = $this->getBookRepository()->findAll();
+
         return $this->render('book/index.html.twig', [
-            'controller_name' => 'BookController',
+            'books' => $books
         ]);
     }
 

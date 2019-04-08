@@ -41,19 +41,19 @@ class Book
     private $status;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\user", inversedBy="books")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="books")
      * @ORM\JoinColumn(nullable=false)
      */
     private $author;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\user", inversedBy="books")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="books")
      * @ORM\JoinColumn(nullable=false)
      */
     private $agent;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\user", inversedBy="books")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="books")
      * @ORM\JoinColumn(nullable=false)
      */
     private $mainReviewer;
@@ -69,7 +69,7 @@ class Book
     private $mainReviewerRating;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\user", inversedBy="books")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="books")
      */
     private $secondaryReviewer;
 
@@ -84,7 +84,7 @@ class Book
     private $secondaryReviewerRating;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\user", inversedBy="books")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="books")
      */
     private $editor;
 

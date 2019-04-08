@@ -3,5 +3,22 @@
 {% block title %}Books{% endblock %}
 
 {% block body %}
-
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Reference</th>
+            <th scope="col">Created On</th>
+            <th scope="col">Name</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for book in books %}
+            <tr>
+                <th scope="row">{{ book.reference }}</th>
+                <td>{{ book.createdOn|date("m/d/Y") }}</td>
+                <td>{{ book.name }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}

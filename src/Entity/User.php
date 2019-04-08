@@ -62,7 +62,6 @@ class User implements UserInterface
         $this->surname = $surname;
         $this->userId = substr(md5(microtime()),rand(0,26),5);
         $this->books = new ArrayCollection();
-        $this->roles = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -157,35 +156,15 @@ class User implements UserInterface
         return $this->address;
     }
 
-    /**
-     * @return Collection|Role[]
-     */
-    public function getRoles(): Collection
-    {
-        return $this->roles;
-    }
 
-    public function addRole(Role $role): self
+    public function getRoles(): array
     {
-        if (!$this->roles->contains($role)) {
-            $this->roles[] = $role;
-            $role->setUser($this);
+        $roles[] = 'ROLE_USER';
+        foreach ($this->roles->getValues() as $role) {
+            $roles[] = $role->getRole();
         }
 
-        return $this;
-    }
-
-    public function removeRole(Role $role): self
-    {
-        if ($this->roles->contains($role)) {
-            $this->roles->removeElement($role);
-            // set the owning side to null (unless already changed)
-            if ($role->getUser() === $this) {
-                $role->setUser(null);
-            }
-        }
-
-        return $this;
+        return array_unique($roles);
     }
 
     public function __toString(): string
