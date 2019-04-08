@@ -21,5 +21,8 @@ services:
     App\CommandHandler\UploadManuscriptCommandHandler:
       tags: ['messenger.message_handler']
 
+    App\CommandHandler\AddBookCommandHandler:
+        tags: ['messenger.message_handler']
+
     App\Helper\Orm:
         arguments: ['@doctrine.orm.entity_manager']

@@ -14,12 +14,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class User implements UserInterface
 {
-    const ROLE_ADMIN = ['id' => 'ROLE_ADMIN', 'desc' => 'Admin'];
-    const ROLE_AGENT = ['id' => 'ROLE_AGENT', 'desc' => 'Agent'];
-    const ROLE_AUTHOR = ['id' => 'ROLE_AUTHOR', 'desc' => 'Author'];
-    const ROLE_EDITOR = ['id' => 'ROLE_EDITOR', 'desc' => 'Editor'];
-    const ROLE_REVIEWER = ['id' => 'ROLE_REVIEWER', 'desc' => 'Reviewer'];
-
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -52,16 +46,15 @@ class User implements UserInterface
      * @ORM\OneToMany(targetEntity="App\Entity\Book", mappedBy="author", orphanRemoval=true)
      */
     private $books;
-
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Role", mappedBy="roles", orphanRemoval=true)
-     */
-    private $roles;
-
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\Address", mappedBy="user", cascade={"persist", "remove"})
      */
     private $address;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Role", mappedBy="user", orphanRemoval=true)
+     */
+    private $roles;
 
     public function __construct($firstName, $surname)
     {
@@ -159,20 +152,45 @@ class User implements UserInterface
         return $this->books;
     }
 
+    public function getAddress(): ?Address
+    {
+        return $this->address;
+    }
+
     /**
      * @return Collection|Role[]
      */
     public function getRoles(): Collection
     {
-        $roles = $this->roles;
-        $roles[] = 'ROLE_USER';
-
-        return array_unique($roles);
+        return $this->roles;
     }
 
-    public function getAddress(): ?Address
+    public function addRole(Role $role): self
     {
-        return $this->address;
+        if (!$this->roles->contains($role)) {
+            $this->roles[] = $role;
+            $role->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRole(Role $role): self
+    {
+        if ($this->roles->contains($role)) {
+            $this->roles->removeElement($role);
+            // set the owning side to null (unless already changed)
+            if ($role->getUser() === $this) {
+                $role->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->firstName.' '.$this->surname;
     }
 
 }

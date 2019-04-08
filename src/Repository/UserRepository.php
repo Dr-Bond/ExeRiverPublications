@@ -22,8 +22,9 @@ class UserRepository extends ServiceEntityRepository
     public function findByRoles($roles)
     {
         return $this->createQueryBuilder('u')
-            ->andWhere('u.roles in (:role)')
-            ->setParameter('role', $roles)
+            ->join('u.roles', 'r')
+            ->andWhere('r.role in (:roles)')
+            ->setParameter('roles', $roles)
             ->orderBy('u.surname')
             ->orderBy('u.firstName')
             ->getQuery()
