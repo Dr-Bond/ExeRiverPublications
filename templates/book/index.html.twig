@@ -13,7 +13,9 @@
             <th scope="col">Author</th>
             <th scope="col">Agent</th>
             <th scope="col">Main Reviewer</th>
+            <th scope="col">Rating</th>
             <th scope="col">Secondary Reviewer</th>
+            <th scope="col">Rating</th>
             <th scope="col">Editor</th>
             <th scope="col">Status</th>
             <th scope="col">Actions</th>
@@ -28,14 +30,22 @@
                 <td>{{ book.author }}</td>
                 <td>{{ book.agent }}</td>
                 <td>{{ book.mainReviewer }}</td>
+                <td>{{ book.mainReviewerRating }}</td>
                 <td>{{ book.secondaryReviewer }}</td>
+                <td>{{ book.secondaryReviewerRating }}</td>
                 <td>{{ book.editor }}</td>
                 <td>{{ book.status }}</td>
                 <td><div class="btn-group">
-                    {% if is_granted('ROLE_AGENT') or is_granted('ROLE_AUTHOR') %}
-                        <a href="{{ path('manuscript_upload', {'book': book.id }) }}" class="btn btn-primary"><i class="fas fa-upload"></i></a>
+                    {% if is_granted('ROLE_AGENT') or is_granted('ROLE_AUTHOR') and book.status != constant('PENDING_REVIEW_STATUS') %}
+                        <a href="{{ path('manuscript_upload', {'book': book.id }) }}" class="btn btn-primary"><i class="fas fa-upload"></i> Upload</a>
                     {% endif %}
-                    <a href="{{ path('manuscripts', {'book': book.id }) }}" class="btn btn-info"><i class="fas fa-scroll"></i></a>
+                    {% if is_granted('ROLE_REVIEWER') and (( app.user == book.mainReviewer and book.mainReviewerRating is null) or (app.user == book.secondaryReviewer and book.secondaryReviewerRating is null)) %}
+                        <a href="{{ path('review_book', {'book': book.id }) }}" class="btn btn-primary"><i class="fas fa-star"></i> Review</a>
+                    {% endif %}
+                    <a href="{{ path('manuscripts', {'book': book.id }) }}" class="btn btn-info"><i class="fas fa-scroll"></i> View</a>
+                    {% if book.notes|length > 0 %}
+                        <a href="{{ path('notes', {'book': book.id }) }}" class="btn btn-secondary"><i class="fas fa-sticky-note"></i> Notes</a>
+                    {% endif %}
                 </div>
                 </td>
             </tr>

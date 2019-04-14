@@ -24,5 +24,8 @@ services:
     App\CommandHandler\AddBookCommandHandler:
         tags: ['messenger.message_handler']
 
+    App\CommandHandler\ReviewBookCommandHandler:
+        tags: ['messenger.message_handler']
+
     App\Helper\Orm:
         arguments: ['@doctrine.orm.entity_manager']

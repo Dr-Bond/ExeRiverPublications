@@ -33,9 +33,10 @@ class BookRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('b')
             ->orderBy('b.createdOn')
             ->where('(b.mainReviewer = :user or b.secondaryReviewer = :user)')
-            ->andWhere('b.status = :pending_review')
+            ->andWhere('(b.status = :pending_review or b.status = :pending_second_review)')
             ->setParameter('user',$user)
             ->setParameter('pending_review',Book::PENDING_REVIEW_STATUS)
+            ->setParameter('pending_second_review',Book::PENDING_SECOND_REVIEW_STATUS)
             ->getQuery()
             ->getResult()
             ;

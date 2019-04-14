@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Command\AddBookCommand;
+use App\Command\ReviewBookCommand;
 use App\Entity\Book;
 use App\Form\AddBookFormType;
+use App\Form\ReviewBookFormType;
 use App\Reporting\BookReport;
 use phpDocumentor\Reflection\Types\Parent_;
 use Symfony\Component\HttpFoundation\Request;
@@ -61,6 +63,26 @@ class BookController extends BaseController
         } else {
             return $this->render('book/add.html.twig', array(
                 'form' => $form->createView(),
+            ));
+        }
+    }
+
+    /**
+     * @Route("/book/review/{book}", name="review_book")
+     */
+    public function review(Book $book, Request $request, MessageBusInterface $bus)
+    {
+        $command = new ReviewBookCommand($book, $this->getUser());
+        $form = $this->createForm(ReviewBookFormType::class, $command);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $bus->dispatch($command);
+            return $this->redirect($this->generateUrl('books'));
+        } else {
+            return $this->render('book/review.html.twig', array(
+                'form' => $form->createView(),
+                'book' => $book
             ));
         }
     }

@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\BookRepository")
@@ -13,6 +14,9 @@ class Book
 {
     const PENDING_MANUSCRIPT_STATUS = 'Pending Manuscript';
     const PENDING_REVIEW_STATUS = 'Pending Review';
+    const PENDING_SECOND_REVIEW_STATUS = 'Pending Secondary Review';
+    const ACCEPTED_STATUS = 'Accepted';
+    const REJECTED_STATUS = 'Rejected';
 
     /**
      * @ORM\Id()
@@ -344,4 +348,33 @@ class Book
 
         return $this;
     }
+
+    public function review(User $user, string $status, int $rating)
+    {
+        if($status !== self::REJECTED_STATUS) {
+            $complete = false;
+            if ($user === $this->mainReviewer) {
+                if ($this->secondaryReviewerRating !== null) {
+                    $complete = true;
+                }
+            } elseif ($user === $this->secondaryReviewer) {
+                if ($this->mainReviewerRating !== null) {
+                    $complete = true;
+                }
+            }
+            if ($complete === false) {
+                $status = self::PENDING_SECOND_REVIEW_STATUS;
+            }
+        }
+
+        $this->status = $status;
+        if ($user === $this->mainReviewer) {
+            $this->mainReviewerRating = $rating;
+        } elseif ($user === $this->secondaryReviewer) {
+            $this->secondaryReviewerRating = $rating;
+        } else {
+            throw new NotFoundHttpException("Not an assigned reviewer");
+        }
+    }
+
 }
