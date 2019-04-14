@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Book;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -22,6 +23,30 @@ class BookRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('b')
             ->orderBy('b.createdOn')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findPendingReview(User $user)
+    {
+        return $this->createQueryBuilder('b')
+            ->orderBy('b.createdOn')
+            ->where('(b.mainReviewer = :user or b.secondaryReviewer = :user)')
+            ->andWhere('b.status = :pending_review')
+            ->setParameter('user',$user)
+            ->setParameter('pending_review',Book::PENDING_REVIEW_STATUS)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findMyBooks(User $user)
+    {
+        return $this->createQueryBuilder('b')
+            ->orderBy('b.createdOn')
+            ->where('(b.author = :user or b.agent = :user)')
+            ->setParameter('user',$user)
             ->getQuery()
             ->getResult()
             ;

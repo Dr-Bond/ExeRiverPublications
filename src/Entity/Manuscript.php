@@ -55,6 +55,25 @@ class Manuscript
      */
     private $book;
 
+    const PENDING_REVIEW = 'Pending Review';
+
+    public function __construct(string $name, string $location, Book $book)
+    {
+        $revision = $book->revisionCount();
+
+        $this->reference = str_replace(' ', '-', $book->getName()).'_#RV'.$revision;
+        $this->name = $name;
+        $this->location = $location;
+        $this->book = $book;
+        $this->revisionNumber = $revision;
+        if($book->getStatus() === Book::PENDING_MANUSCRIPT_STATUS or $book->getStatus() === Book::PENDING_REVIEW_STATUS) {
+            $this->status = self::PENDING_REVIEW;
+        }
+        $this->uploadedOn = new \DateTime();
+        $book->setStatus(Book::PENDING_REVIEW_STATUS);
+
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -143,4 +162,5 @@ class Manuscript
 
         return $this;
     }
+
 }

@@ -5,9 +5,11 @@ namespace App\Controller;
 use App\Command\AddBookCommand;
 use App\Entity\Book;
 use App\Form\AddBookFormType;
+use App\Reporting\BookReport;
 use phpDocumentor\Reflection\Types\Parent_;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
@@ -20,14 +22,26 @@ class BookController extends BaseController
     }
 
     /**
-     * @Route("/book", name="book")
+     * @Route("/books", name="books")
      */
     public function index()
     {
-        $books = $this->getBookRepository()->findAll();
+        if ($this->isAdmin()) {
+            $books = $this->getBookRepository()->findAll();
+            $subHeading = 'All Books';
+        } elseif($this->isAgent() or $this->isAuthor()) {
+            $books = $this->getBookRepository()->findMyBooks($this->getUser());
+            $subHeading = 'My Books';
+        } elseif($this->isReviewer()) {
+            $books = $this->getBookRepository()->findPendingReview($this->getUser());
+            $subHeading = 'Status: '. Book::PENDING_REVIEW_STATUS;
+        } else {
+            throw new NotFoundHttpException("User Role Not Found");
+        }
 
         return $this->render('book/index.html.twig', [
-            'books' => $books
+            'books' => $books,
+            'subHeading' => $subHeading
         ]);
     }
 
@@ -43,7 +57,7 @@ class BookController extends BaseController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $bus->dispatch($command);
-            return new Response("Book is successfully added.");
+            return $this->redirect($this->generateUrl('books'));
         } else {
             return $this->render('book/add.html.twig', array(
                 'form' => $form->createView(),

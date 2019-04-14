@@ -16,9 +16,6 @@ class UploadManuscriptFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('reference', TextType::class, [
-                'required' => true
-            ])
             ->add('name', TextType::class, [
                 'required' => true
             ])

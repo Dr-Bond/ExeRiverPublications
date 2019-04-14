@@ -20,15 +20,17 @@ class UploadManuscriptCommandHandler
 
     public function __invoke(UploadManuscriptCommand $command)
     {
-        $orm = $this->orm;
-        $manuscript = new Manuscript();
-
         $file = $command->getLocation();
         $fileName = md5(uniqid()).'.'.$file->guessExtension();
         $file->move($this->params->get('manuscript_directory'), $fileName);
-        $manuscript->setReference($command->getReference());
-        $manuscript->setName($command->getName());
-        $manuscript->setLocation($fileName);
+
+        $orm = $this->orm;
+        $manuscript = new Manuscript(
+            $command->getName(),
+            $fileName,
+            $command->getBook()
+        );
+
         $orm->persist($manuscript);
         $orm->flush();
     }

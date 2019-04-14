@@ -56,12 +56,18 @@ class User implements UserInterface
      */
     private $roles;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Note", mappedBy="addedBy")
+     */
+    private $notes;
+
     public function __construct($firstName, $surname)
     {
         $this->firstName = $firstName;
         $this->surname = $surname;
         $this->userId = substr(md5(microtime()),rand(0,26),5);
         $this->books = new ArrayCollection();
+        $this->notes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -172,4 +178,11 @@ class User implements UserInterface
         return $this->firstName.' '.$this->surname;
     }
 
+    /**
+     * @return Collection|Note[]
+     */
+    public function getNotes(): Collection
+    {
+        return $this->notes;
+    }
 }

@@ -1,14 +1,22 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Books{% endblock %}
-
 {% block body %}
+    <h1>Books</h1>
+    <h3>{{ subHeading }}</h3>
     <table class="table">
         <thead>
         <tr>
             <th scope="col">Reference</th>
             <th scope="col">Created On</th>
             <th scope="col">Name</th>
+            <th scope="col">Author</th>
+            <th scope="col">Agent</th>
+            <th scope="col">Main Reviewer</th>
+            <th scope="col">Secondary Reviewer</th>
+            <th scope="col">Editor</th>
+            <th scope="col">Status</th>
+            <th scope="col">Actions</th>
         </tr>
         </thead>
         <tbody>
@@ -17,6 +25,19 @@
                 <th scope="row">{{ book.reference }}</th>
                 <td>{{ book.createdOn|date("m/d/Y") }}</td>
                 <td>{{ book.name }}</td>
+                <td>{{ book.author }}</td>
+                <td>{{ book.agent }}</td>
+                <td>{{ book.mainReviewer }}</td>
+                <td>{{ book.secondaryReviewer }}</td>
+                <td>{{ book.editor }}</td>
+                <td>{{ book.status }}</td>
+                <td><div class="btn-group">
+                    {% if is_granted('ROLE_AGENT') or is_granted('ROLE_AUTHOR') %}
+                        <a href="{{ path('manuscript_upload', {'book': book.id }) }}" class="btn btn-primary"><i class="fas fa-upload"></i></a>
+                    {% endif %}
+                    <a href="{{ path('manuscripts', {'book': book.id }) }}" class="btn btn-info"><i class="fas fa-scroll"></i></a>
+                </div>
+                </td>
             </tr>
         {% endfor %}
         </tbody>

@@ -1,6 +1,29 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{% endblock %}
-
+{% block title %}Manuscripts{% endblock %}
 {% block body %}
+    <h1>Manuscripts</h1>
+    <h3>{{ book }}</h3>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Reference</th>
+            <th scope="col">Revision Number</th>
+            <th scope="col">Created On</th>
+            <th scope="col">Name</th>
+            <th scope="col">Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for manuscript in manuscripts %}
+            <tr>
+                <th scope="row">{{ manuscript.reference }}</th>
+                <td>{{ manuscript.revisionNumber }}</td>
+                <td>{{ manuscript.uploadedOn|date("m/d/Y") }}</td>
+                <td>{{ manuscript.name }}</td>
+                <td>{{ manuscript.status }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}

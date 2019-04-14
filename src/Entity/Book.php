@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Book
 {
     const PENDING_MANUSCRIPT_STATUS = 'Pending Manuscript';
+    const PENDING_REVIEW_STATUS = 'Pending Review';
 
     /**
      * @ORM\Id()
@@ -59,11 +60,6 @@ class Book
     private $mainReviewer;
 
     /**
-     * @ORM\Column(type="string", length=4000, nullable=true)
-     */
-    private $mainReviewerComments;
-
-    /**
      * @ORM\Column(type="integer", nullable=true)
      */
     private $mainReviewerRating;
@@ -74,11 +70,6 @@ class Book
     private $secondaryReviewer;
 
     /**
-     * @ORM\Column(type="string", length=4000, nullable=true)
-     */
-    private $secondaryReviewerComments;
-
-    /**
      * @ORM\Column(type="integer", nullable=true)
      */
     private $secondaryReviewerRating;
@@ -87,11 +78,6 @@ class Book
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="books")
      */
     private $editor;
-
-    /**
-     * @ORM\Column(type="string", length=4000, nullable=true)
-     */
-    private $editorComments;
 
     /**
      * @ORM\Column(type="float", nullable=true)
@@ -108,6 +94,11 @@ class Book
      */
     private $manuscripts;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Note", mappedBy="book", orphanRemoval=true)
+     */
+    private $notes;
+
     public function __construct(string $name, string $reference, User $author, User $agent, User $mainReviewer)
     {
         $this->name = $name;
@@ -118,6 +109,7 @@ class Book
         $this->createdOn = new \Datetime;
         $this->status = self::PENDING_MANUSCRIPT_STATUS;
         $this->manuscripts = new ArrayCollection();
+        $this->notes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -209,18 +201,6 @@ class Book
         return $this;
     }
 
-    public function getMainReviewerComments(): ?string
-    {
-        return $this->mainReviewerComments;
-    }
-
-    public function setMainReviewerComments(?string $mainReviewerComments): self
-    {
-        $this->mainReviewerComments = $mainReviewerComments;
-
-        return $this;
-    }
-
     public function getMainReviewerRating(): ?int
     {
         return $this->mainReviewerRating;
@@ -245,18 +225,6 @@ class Book
         return $this;
     }
 
-    public function getSecondaryReviewerComments(): ?string
-    {
-        return $this->secondaryReviewerComments;
-    }
-
-    public function setSecondaryReviewerComments(?string $secondaryReviewerComments): self
-    {
-        $this->secondaryReviewerComments = $secondaryReviewerComments;
-
-        return $this;
-    }
-
     public function getSecondaryReviewerRating(): ?int
     {
         return $this->secondaryReviewerRating;
@@ -277,18 +245,6 @@ class Book
     public function setEditor(?User $editor): self
     {
         $this->editor = $editor;
-
-        return $this;
-    }
-
-    public function getEditorComments(): ?string
-    {
-        return $this->editorComments;
-    }
-
-    public function setEditorComments(?string $editorComments): self
-    {
-        $this->editorComments = $editorComments;
 
         return $this;
     }
@@ -341,6 +297,48 @@ class Book
             $this->manuscripts->removeElement($manuscript);
             if ($manuscript->getBook() === $this) {
                 $manuscript->setBook(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->name;
+    }
+
+    public function revisionCount(): ?int
+    {
+        return   count($this->getManuscripts());
+
+    }
+
+    /**
+     * @return Collection|Note[]
+     */
+    public function getNotes(): Collection
+    {
+        return $this->notes;
+    }
+
+    public function addNote(Note $note): self
+    {
+        if (!$this->notes->contains($note)) {
+            $this->notes[] = $note;
+            $note->setBook($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNote(Note $note): self
+    {
+        if ($this->notes->contains($note)) {
+            $this->notes->removeElement($note);
+            // set the owning side to null (unless already changed)
+            if ($note->getBook() === $this) {
+                $note->setBook(null);
             }
         }
 
