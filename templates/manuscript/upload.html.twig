@@ -6,6 +6,7 @@
     <h1>Upload Manuscript</h1>
     <h2>{{ book }}</h2>
     {{ form_start(form) }}
+    {{ form_errors(form) }}
     {{ form_row(form.location) }}
     {{ form_row(form.name) }}
     {{ form_row(form.save) }}

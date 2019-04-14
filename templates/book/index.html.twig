@@ -42,6 +42,9 @@
                     {% if is_granted('ROLE_REVIEWER') and (( app.user == book.mainReviewer and book.mainReviewerRating is null) or (app.user == book.secondaryReviewer and book.secondaryReviewerRating is null)) %}
                         <a href="{{ path('review_book', {'book': book.id }) }}" class="btn btn-primary"><i class="fas fa-star"></i> Review</a>
                     {% endif %}
+                        {% if is_granted('ROLE_ADMIN') and book.status == 'Accepted' and book.editor == null %}
+                        <a href="{{ path('assign_editor_book', {'book': book.id }) }}" class="btn btn-primary"><i class="fas fa-user-plus"></i> Assign Editor</a>
+                    {% endif %}
                     <a href="{{ path('manuscripts', {'book': book.id }) }}" class="btn btn-info"><i class="fas fa-scroll"></i> View</a>
                     {% if book.notes|length > 0 %}
                         <a href="{{ path('notes', {'book': book.id }) }}" class="btn btn-secondary"><i class="fas fa-sticky-note"></i> Notes</a>

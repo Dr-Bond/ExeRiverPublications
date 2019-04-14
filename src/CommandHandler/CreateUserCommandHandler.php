@@ -6,7 +6,6 @@ use App\Command\CreateUserCommand;
 use App\Entity\Address;
 use App\Entity\Role;
 use App\Entity\User;
-use App\Entity\UserRole;
 use App\Helper\Orm;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 

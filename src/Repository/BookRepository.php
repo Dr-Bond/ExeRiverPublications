@@ -52,4 +52,17 @@ class BookRepository extends ServiceEntityRepository
             ->getResult()
             ;
     }
+
+    public function findApproved(User $user)
+    {
+        return $this->createQueryBuilder('b')
+            ->orderBy('b.createdOn')
+            ->where('b.editor = :user')
+            ->andWhere('b.status in (:accepted)')
+            ->setParameter('user',$user)
+            ->setParameter('accepted', Book::ACCEPTED_STATUS)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
 }
