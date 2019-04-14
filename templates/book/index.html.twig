@@ -48,6 +48,8 @@
                     <a href="{{ path('manuscripts', {'book': book.id }) }}" class="btn btn-info"><i class="fas fa-scroll"></i> View</a>
                     {% if book.notes|length > 0 %}
                         <a href="{{ path('notes', {'book': book.id }) }}" class="btn btn-secondary"><i class="fas fa-sticky-note"></i> Notes</a>
+                    {% elseif is_granted('ROLE_ADMIN') or is_granted('ROLE_REVIEWER') or is_granted('ROLE_EDITOR') %}
+                        <a href="{{ path('add_note', {'book': book.id }) }}" class="btn btn-secondary"><i class="far fa-sticky-note"></i> Add Note</a>
                     {% endif %}
                 </div>
                 </td>

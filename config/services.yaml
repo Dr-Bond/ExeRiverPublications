@@ -30,5 +30,8 @@ services:
     App\CommandHandler\AssignEditorCommandHandler:
         tags: ['messenger.message_handler']
 
+    App\CommandHandler\AddNoteCommandHandler:
+        tags: ['messenger.message_handler']
+
     App\Helper\Orm:
         arguments: ['@doctrine.orm.entity_manager']

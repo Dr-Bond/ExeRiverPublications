@@ -1,8 +1,8 @@
 var $ = require('jquery');
 
-require('../css/global.scss');
 require('bootstrap');
 import '../css/main.css';
+require('../css/global.scss');
 
 $(document).ready(function() {
     $('[data-toggle="popover"]').popover();

@@ -3,7 +3,6 @@
 namespace App\Form;
 
 use App\Command\UploadManuscriptCommand;
-use App\Entity\Manuscript;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
