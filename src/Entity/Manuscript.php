@@ -10,6 +10,12 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Manuscript
 {
+    const PENDING_REVIEW = 'Pending Review';
+    const ACCEPTED_STATUS = 'Accepted';
+    const REJECTED_STATUS = 'Rejected';
+    const REVISION_REQUIRED_STATUS = 'Revision Required';
+    const PUBLISHED_STATUS = 'Published';
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -54,12 +60,6 @@ class Manuscript
      * @ORM\JoinColumn(nullable=false)
      */
     private $book;
-
-    const PENDING_REVIEW = 'Pending Review';
-    const ACCEPTED_STATUS = 'Accepted';
-    const REJECTED_STATUS = 'Rejected';
-    const REVISION_REQUIRED_STATUS = 'Revision Required';
-    const PUBLISHED_STATUS = 'Published';
 
     public function __construct(string $name, string $location, Book $book)
     {

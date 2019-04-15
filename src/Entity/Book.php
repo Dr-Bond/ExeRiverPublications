@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use App\Repository\ManuscriptRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -101,6 +100,11 @@ class Book
      * @ORM\OneToMany(targetEntity="App\Entity\Payment", mappedBy="book", orphanRemoval=true)
      */
     private $payments;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $editorRating;
 
     public function __construct(string $name, string $reference, User $author, User $agent, User $mainReviewer)
     {
@@ -375,6 +379,18 @@ class Book
     public function getPayments(): Collection
     {
         return $this->payments;
+    }
+
+    public function getEditorRating(): ?int
+    {
+        return $this->editorRating;
+    }
+
+    public function setEditorRating(?int $editorRating): self
+    {
+        $this->editorRating = $editorRating;
+
+        return $this;
     }
 
 }
