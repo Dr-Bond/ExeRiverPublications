@@ -51,6 +51,9 @@
                         <a href="{{ path('process_book', {'book': book.id }) }}" class="btn btn-primary"><i class="fas fa-spinner"></i> Process</a>
                     {% endif %}
                     <a href="{{ path('manuscripts', {'book': book.id }) }}" class="btn btn-info"><i class="fas fa-scroll"></i> View</a>
+                    {% if book.payments|length > 0 %}
+                        <a href="{{ path('payments', {'book': book.id }) }}" class="btn btn-success"><i class="fas fa-euro-sign"></i> Payments</a>
+                    {% endif %}
                     {% if book.notes|length > 0 %}
                         <a href="{{ path('notes', {'book': book.id }) }}" class="btn btn-secondary"><i class="fas fa-sticky-note"></i> Notes</a>
                     {% elseif is_granted('ROLE_ADMIN') or is_granted('ROLE_REVIEWER') or is_granted('ROLE_EDITOR') %}

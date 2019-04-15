@@ -4,6 +4,7 @@ namespace App\CommandHandler;
 
 use App\Command\ProcessBookCommand;
 use App\Entity\Note;
+use App\Entity\Payment;
 use App\Helper\Orm;
 
 class ProcessBookCommandHandler
@@ -28,6 +29,15 @@ class ProcessBookCommandHandler
         $book->setStatus($command->getProcess());
         $book->setEditorRating($command->getRating());
         $book->processManuscripts($command->getProcess());
+        if($command->getAmount() !== null) {
+            $payment = new Payment(
+                $command->getBook(),
+                $command->getUser(),
+                $command->getAmount(),
+                Payment::FINAL_PAYMENT_TYPE
+            );
+            $orm->persist($payment);
+        }
         $orm->persist($note);
         $orm->persist($book);
         $orm->flush();

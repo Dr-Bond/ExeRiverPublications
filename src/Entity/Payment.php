@@ -44,7 +44,16 @@ class Payment
      * @ORM\ManyToOne(targetEntity="App\Entity\Book", inversedBy="payments")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $Book;
+    private $book;
+
+    public function __construct(Book $book, User $paymentMadeBy, int $amount, string $paymentType)
+    {
+        $this->book = $book;
+        $this->paymentMadeBy = $paymentMadeBy;
+        $this->amount = $amount;
+        $this->paymentType = $paymentType;
+        $this->paidOn = new \DateTime();
+    }
 
     public function getId(): ?int
     {
@@ -101,12 +110,12 @@ class Payment
 
     public function getBook(): ?Book
     {
-        return $this->Book;
+        return $this->book;
     }
 
-    public function setBook(?Book $Book): self
+    public function setBook(?Book $book): self
     {
-        $this->Book = $Book;
+        $this->book = $book;
 
         return $this;
     }

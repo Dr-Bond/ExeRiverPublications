@@ -6,6 +6,7 @@ use App\Command\ReviewBookCommand;
 use App\Form\Type\ReviewProcessType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -35,6 +36,10 @@ class ReviewBookFormType extends AbstractType
                     '10' => 10,
                 ],
                 'required' => true
+            ])
+            ->add('amount', MoneyType::class, [
+                'required' => false,
+                'label' => 'Payment amount'
             ])
             ->add('save', SubmitType::class, [
                     'label' => 'Submit']

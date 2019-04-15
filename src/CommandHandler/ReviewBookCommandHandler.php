@@ -5,6 +5,7 @@ namespace App\CommandHandler;
 use App\Command\ReviewBookCommand;
 use App\Entity\Book;
 use App\Entity\Note;
+use App\Entity\Payment;
 use App\Helper\Orm;
 
 class ReviewBookCommandHandler
@@ -31,8 +32,19 @@ class ReviewBookCommandHandler
             $command->getProcess(),
             $command->getRating()
         );
+
         if ($command->getProcess() === Book::REJECTED_STATUS) {
             $book->processManuscripts($command->getProcess());
+        }
+
+        if($command->getAmount() !== null) {
+            $payment = new Payment(
+                $command->getBook(),
+                $command->getUser(),
+                $command->getAmount(),
+                Payment::ADVANCED_PAYMENT_TYPE
+            );
+            $orm->persist($payment);
         }
 
         $orm->persist($note);

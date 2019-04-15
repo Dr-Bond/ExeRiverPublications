@@ -5,13 +5,12 @@ namespace App\Controller;
 use App\Command\UploadManuscriptCommand;
 use App\Entity\Book;
 use App\Form\UploadManuscriptFormType;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ManuscriptController extends AbstractController
+class ManuscriptController extends BaseController
 {
     /**
      * @Route("/manuscripts/{book}", name="manuscripts")
