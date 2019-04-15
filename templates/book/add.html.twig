@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Add Book{% endblock %}
+
+{% block body %}
+    <h1>Add Book</h1>
+    {{ form_start(form) }}
+        {{ form_errors(form) }}
+        <div class="card">
+            <div class="card-header">
+                Details
+            </div>
+            <div class="card-body">
+                {{ form_row(form.reference) }}
+                {{ form_row(form.name) }}
+                {{ form_row(form.author) }}
+                {{ form_row(form.agent) }}
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                Assign
+            </div>
+            <div class="card-body">
+                {{ form_row(form.mainReviewer) }}
+                {{ form_row(form.secondaryReviewer) }}
+            </div>
+        </div>
+        {{ form_row(form.save) }}
+    {{ form_end(form) }}
+{% endblock %}

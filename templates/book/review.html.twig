@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Review Book{% endblock %}
+
+{% block body %}
+    <h1>Review Book</h1>
+    <h2>{{ book }}</h2>
+    {{ form_start(form) }}
+        {{ form_errors(form) }}
+        {{ form_row(form.feedback) }}
+        {{ form_row(form.rating) }}
+        {{ form_row(form.process) }}
+        {{ form_row(form.save) }}
+    {{ form_end(form) }}
+{% endblock %}

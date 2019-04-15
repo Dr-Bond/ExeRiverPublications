@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Search Books{% endblock %}
+{% block body %}
+    <h1>Search Books</h1>
+    {{ form_start(form) }}
+        {{ form_errors(form) }}
+        {{ form_row(form.status) }}
+        {{ form_row(form.search) }}
+    {{ form_end(form) }}
+    {% if form.vars.submitted %}
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Reference</th>
+                <th scope="col">Created On</th>
+                <th scope="col">Name</th>
+                <th scope="col">Author</th>
+                <th scope="col">Agent</th>
+                <th scope="col">Main Reviewer</th>
+                <th scope="col">Rating</th>
+                <th scope="col">Secondary Reviewer</th>
+                <th scope="col">Rating</th>
+                <th scope="col">Editor</th>
+                <th scope="col">Rating</th>
+                <th scope="col">Status</th>
+                <th scope="col">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for book in books %}
+                <tr>
+                    <th scope="row">{{ book.reference }}</th>
+                    <td>{{ book.createdOn|date("m/d/Y") }}</td>
+                    <td>{{ book.name }}</td>
+                    <td>{{ book.author }}</td>
+                    <td>{{ book.agent }}</td>
+                    <td>{{ book.mainReviewer }}</td>
+                    <td>{{ book.mainReviewerRating }}</td>
+                    <td>{{ book.secondaryReviewer }}</td>
+                    <td>{{ book.secondaryReviewerRating }}</td>
+                    <td>{{ book.editor }}</td>
+                    <td>{{ book.editorRating }}</td>
+                    <td>{{ book.status }}</td>
+                    <td><div class="btn-group">
+                            <a href="{{ path('manuscripts', {'book': book.id }) }}" class="btn btn-info"><i class="fas fa-scroll"></i> View</a>
+                            {% if book.notes|length > 0 %}
+                                <a href="{{ path('notes', {'book': book.id }) }}" class="btn btn-secondary"><i class="fas fa-sticky-note"></i> Notes</a>
+                            {% elseif is_granted('ROLE_ADMIN') or is_granted('ROLE_REVIEWER') or is_granted('ROLE_EDITOR') %}
+                                <a href="{{ path('add_note', {'book': book.id }) }}" class="btn btn-secondary"><i class="far fa-sticky-note"></i> Add Note</a>
+                            {% endif %}
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}

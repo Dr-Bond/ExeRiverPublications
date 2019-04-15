@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Notes{% endblock %}
+{% block body %}
+    <h1>Notes</h1>
+    <h3>{{ book }}</h3>
+    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_REVIEWER') or is_granted('ROLE_EDITOR') %}
+        <a href="{{ path('add_note', {'book': book.id }) }}" class="btn btn-success"><i class="fas fa-plus"></i> Add Note</a>
+    {% endif %}
+    <table class="table" style="margin-top: 1%;">
+        <thead>
+        <tr>
+            <th scope="col">Note Type</th>
+            <th scope="col">Added By</th>
+            <th scope="col">Content</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for note in book.notes %}
+            <tr>
+                <th>{{ note.noteType }}</th>
+                <td>{{ note.addedBy }}</td>
+                <td>{{ note.content }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

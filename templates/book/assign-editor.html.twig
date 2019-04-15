@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Assign Editor{% endblock %}
+
+{% block body %}
+    <h1>Assign Editor</h1>
+    <h2>{{ book }}</h2>
+    {{ form_start(form) }}
+        {{ form_errors(form) }}
+        {{ form_row(form.editor) }}
+        {{ form_row(form.save) }}
+    {{ form_end(form) }}
+{% endblock %}
