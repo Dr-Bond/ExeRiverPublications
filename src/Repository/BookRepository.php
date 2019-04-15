@@ -53,16 +53,29 @@ class BookRepository extends ServiceEntityRepository
             ;
     }
 
-    public function findApproved(User $user)
+    public function findPendingEditorProcessing(User $user)
     {
         return $this->createQueryBuilder('b')
             ->orderBy('b.createdOn')
             ->where('b.editor = :user')
-            ->andWhere('b.status in (:accepted)')
+            ->andWhere('b.status in (:accepted, :pending)')
             ->setParameter('user',$user)
             ->setParameter('accepted', Book::ACCEPTED_STATUS)
+            ->setParameter('pending', Book::PENDING_EDITOR_REVIEW_STATUS)
             ->getQuery()
             ->getResult()
             ;
     }
+
+    public function findByStatus(string $status)
+    {
+        return $this->createQueryBuilder('b')
+            ->orderBy('b.createdOn')
+            ->andWhere('b.status = :status')
+            ->setParameter('status', $status)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
 }

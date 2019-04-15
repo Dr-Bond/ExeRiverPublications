@@ -56,6 +56,10 @@ class Manuscript
     private $book;
 
     const PENDING_REVIEW = 'Pending Review';
+    const ACCEPTED_STATUS = 'Accepted';
+    const REJECTED_STATUS = 'Rejected';
+    const REVISION_REQUIRED_STATUS = 'Revision Required';
+    const PUBLISHED_STATUS = 'Published';
 
     public function __construct(string $name, string $location, Book $book)
     {
@@ -66,11 +70,8 @@ class Manuscript
         $this->location = $location;
         $this->book = $book;
         $this->revisionNumber = $revision;
-        if($book->getStatus() === Book::PENDING_MANUSCRIPT_STATUS or $book->getStatus() === Book::PENDING_REVIEW_STATUS) {
-            $this->status = self::PENDING_REVIEW;
-        }
+        $this->status = self::PENDING_REVIEW;
         $this->uploadedOn = new \DateTime();
-        $book->setStatus(Book::PENDING_REVIEW_STATUS);
 
     }
 
@@ -151,12 +152,12 @@ class Manuscript
         return $this;
     }
 
-    public function getBook(): ?book
+    public function getBook(): ?Book
     {
         return $this->book;
     }
 
-    public function setBook(?book $book): self
+    public function setBook(?Book $book): self
     {
         $this->book = $book;
 

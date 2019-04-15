@@ -33,7 +33,9 @@ class AddBookFormType extends AbstractType
                 'required' => true
             ])
             ->add('secondaryReviewer', ReviewerType::class)
-            ->add('save', SubmitType::class, array('label' => 'Submit'))
+            ->add('save', SubmitType::class, [
+                    'label' => 'Submit']
+            )
         ;
     }
 

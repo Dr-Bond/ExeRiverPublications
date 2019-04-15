@@ -61,6 +61,11 @@ class User implements UserInterface
      */
     private $notes;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Payment", mappedBy="paymentMadeBy", orphanRemoval=true)
+     */
+    private $payments;
+
     public function __construct($firstName, $surname)
     {
         $this->firstName = $firstName;
@@ -68,6 +73,7 @@ class User implements UserInterface
         $this->userId = substr(md5(microtime()),rand(0,26),5);
         $this->books = new ArrayCollection();
         $this->notes = new ArrayCollection();
+        $this->payments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -184,5 +190,36 @@ class User implements UserInterface
     public function getNotes(): Collection
     {
         return $this->notes;
+    }
+
+    /**
+     * @return Collection|Payment[]
+     */
+    public function getPayments(): Collection
+    {
+        return $this->payments;
+    }
+
+    public function addPayment(Payment $payment): self
+    {
+        if (!$this->payments->contains($payment)) {
+            $this->payments[] = $payment;
+            $payment->setPaymentMadeBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removePayment(Payment $payment): self
+    {
+        if ($this->payments->contains($payment)) {
+            $this->payments->removeElement($payment);
+            // set the owning side to null (unless already changed)
+            if ($payment->getPaymentMadeBy() === $this) {
+                $payment->setPaymentMadeBy(null);
+            }
+        }
+
+        return $this;
     }
 }

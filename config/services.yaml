@@ -33,5 +33,11 @@ services:
     App\CommandHandler\AddNoteCommandHandler:
         tags: ['messenger.message_handler']
 
+    App\CommandHandler\ProcessBookCommandHandler:
+        tags: ['messenger.message_handler']
+
+    App\CommandHandler\SearchBookCommandHandler:
+        tags: ['messenger.message_handler']
+
     App\Helper\Orm:
         arguments: ['@doctrine.orm.entity_manager']

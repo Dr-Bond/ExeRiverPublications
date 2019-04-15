@@ -45,7 +45,9 @@ class CreateUserFormType extends AbstractType
             ->add('country', TextType::class, [
                 'required' => true
             ])
-            ->add('save', SubmitType::class, array('label' => 'Create User'))
+            ->add('save', SubmitType::class, [
+                    'label' => 'Submit']
+            )
         ;
     }
 

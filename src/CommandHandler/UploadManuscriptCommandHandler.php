@@ -3,6 +3,7 @@
 namespace App\CommandHandler;
 
 use App\Command\UploadManuscriptCommand;
+use App\Entity\Book;
 use App\Entity\Manuscript;
 use App\Helper\Orm;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -25,12 +26,19 @@ class UploadManuscriptCommandHandler
         $file->move($this->params->get('manuscript_directory'), $fileName);
 
         $orm = $this->orm;
+        $book = $command->getBook();
         $manuscript = new Manuscript(
             $command->getName(),
             $fileName,
-            $command->getBook()
+            $book
         );
-
+        if($book->getStatus() === Book::REVISION_REQUIRED_STATUS) {
+            $book->setStatus(Book::PENDING_EDITOR_REVIEW_STATUS);
+            $orm->persist($book);
+        } else {
+            $book->setStatus(Book::PENDING_REVIEW_STATUS);
+            $orm->persist($book);
+        }
         $orm->persist($manuscript);
         $orm->flush();
     }

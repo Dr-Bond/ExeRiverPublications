@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Repository\ManuscriptRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -17,6 +18,9 @@ class Book
     const PENDING_SECOND_REVIEW_STATUS = 'Pending Secondary Review';
     const ACCEPTED_STATUS = 'Accepted';
     const REJECTED_STATUS = 'Rejected';
+    const REVISION_REQUIRED_STATUS = 'Revision Required';
+    const PUBLISHED_STATUS = 'Published';
+    const PENDING_EDITOR_REVIEW_STATUS = 'Pending Editor Review';
 
     /**
      * @ORM\Id()
@@ -84,16 +88,6 @@ class Book
     private $editor;
 
     /**
-     * @ORM\Column(type="float", nullable=true)
-     */
-    private $paymentAmount;
-
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    private $paidOn;
-
-    /**
      * @ORM\OneToMany(targetEntity="App\Entity\Manuscript", mappedBy="book", orphanRemoval=true)
      */
     private $manuscripts;
@@ -102,6 +96,11 @@ class Book
      * @ORM\OneToMany(targetEntity="App\Entity\Note", mappedBy="book", orphanRemoval=true)
      */
     private $notes;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Payment", mappedBy="book", orphanRemoval=true)
+     */
+    private $payments;
 
     public function __construct(string $name, string $reference, User $author, User $agent, User $mainReviewer)
     {
@@ -114,6 +113,7 @@ class Book
         $this->status = self::PENDING_MANUSCRIPT_STATUS;
         $this->manuscripts = new ArrayCollection();
         $this->notes = new ArrayCollection();
+        $this->payments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -253,30 +253,6 @@ class Book
         return $this;
     }
 
-    public function getPaymentAmount(): ?float
-    {
-        return $this->paymentAmount;
-    }
-
-    public function setPaymentAmount(?float $paymentAmount): self
-    {
-        $this->paymentAmount = $paymentAmount;
-
-        return $this;
-    }
-
-    public function getPaidOn(): ?\DateTimeInterface
-    {
-        return $this->paidOn;
-    }
-
-    public function setPaidOn(?\DateTimeInterface $paidOn): self
-    {
-        $this->paidOn = $paidOn;
-
-        return $this;
-    }
-
     /**
      * @return Collection|Manuscript[]
      */
@@ -375,6 +351,30 @@ class Book
         } else {
             throw new NotFoundHttpException("Not an assigned reviewer");
         }
+    }
+
+    public function processManuscripts($status)
+    {
+        foreach ($this->manuscripts as $manuscript) {
+            if($manuscript->getStatus() !== $status and $manuscript->getStatus() !== Manuscript::REJECTED_STATUS) {
+                if($status == self::PUBLISHED_STATUS and $manuscript->getStatus() !== Manuscript::REVISION_REQUIRED_STATUS) {
+                    $manuscript->setStatus(Manuscript::PUBLISHED_STATUS);
+                } elseif($status == self::REVISION_REQUIRED_STATUS) {
+                    $manuscript->setStatus(Manuscript::REVISION_REQUIRED_STATUS);
+                } else {
+                    $manuscript->setStatus(Manuscript::REJECTED_STATUS);
+                }
+
+            }
+        }
+    }
+
+    /**
+     * @return Collection|Payment[]
+     */
+    public function getPayments(): Collection
+    {
+        return $this->payments;
     }
 
 }

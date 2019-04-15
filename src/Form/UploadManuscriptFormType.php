@@ -22,7 +22,9 @@ class UploadManuscriptFormType extends AbstractType
                 'label' => 'Manuscript (PDF file)',
                 'required' => true
             ])
-            ->add('save', SubmitType::class, array('label' => 'Submit'))
+            ->add('save', SubmitType::class, [
+                'label' => 'Submit']
+            )
         ;
     }
 
