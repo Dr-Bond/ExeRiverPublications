@@ -16,16 +16,25 @@ class NoteController extends BaseController
      */
     public function index(Book $book)
     {
+        if($this->isAdmin()) {
+            $notes = $this->getNoteRepository()->findNonFeedbackNotes();
+        } else {
+            $notes = $book->getNotes();
+        }
+
         return $this->render('note/index.html.twig', [
-            'book' => $book,
+            'notes' => $notes,
+            'book' => $book
         ]);
     }
 
     /**
      * @Route("/note/add/{book}", name="add_note")
      */
-    public function assignEditor(Book $book, Request $request, MessageBusInterface $bus)
+    public function addNote(Book $book, Request $request, MessageBusInterface $bus)
     {
+        $this->denyAccessUnlessGranted(['ROLE_ADMIN','ROLE_REVIEWER','ROLE_EDITOR']);
+
         $command = new AddNoteCommand($book,$this->getUser());
         $form = $this->createForm(AddNoteFormType::class, $command);
         $form->handleRequest($request);

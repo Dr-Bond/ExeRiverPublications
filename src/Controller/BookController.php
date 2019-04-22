@@ -8,7 +8,6 @@ use App\Command\ProcessBookCommand;
 use App\Command\ReviewBookCommand;
 use App\Command\SearchBookCommand;
 use App\Entity\Book;
-use App\EventListener\NotificationEvent;
 use App\Form\AddBookFormType;
 use App\Form\AssignEditorFormType;
 use App\Form\ProcessBookFormType;
@@ -56,10 +55,12 @@ class BookController extends BaseController
     }
 
     /**
-     * @Route("/book/add", name="book_add")
+     * @Route("/book/add", name="add_book")
      */
     public function upload(Request $request, MessageBusInterface $bus)
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $command = new AddBookCommand();
 
         $form = $this->createForm(AddBookFormType::class, $command);
@@ -80,6 +81,8 @@ class BookController extends BaseController
      */
     public function search(Request $request, MessageBusInterface $bus)
     {
+        $this->denyAccessUnlessGranted(['ROLE_ADMIN','ROLE_REVIEWER','ROLE_EDITOR']);
+
         $command = new SearchBookCommand();
 
         $form = $this->createForm(SearchBookFormType::class, $command);
@@ -106,6 +109,8 @@ class BookController extends BaseController
      */
     public function review(Book $book, Request $request, MessageBusInterface $bus)
     {
+        $this->denyAccessUnlessGranted('ROLE_REVIEWER');
+
         $command = new ReviewBookCommand($book, $this->getUser());
         $form = $this->createForm(ReviewBookFormType::class, $command);
         $form->handleRequest($request);
@@ -126,6 +131,8 @@ class BookController extends BaseController
      */
     public function assignEditor(Book $book, Request $request, MessageBusInterface $bus)
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $command = new AssignEditorCommand($book);
         $form = $this->createForm(AssignEditorFormType::class, $command);
         $form->handleRequest($request);
@@ -146,6 +153,8 @@ class BookController extends BaseController
      */
     public function processBook(Book $book, Request $request, MessageBusInterface $bus)
     {
+        $this->denyAccessUnlessGranted('ROLE_EDITOR');
+
         $command = new ProcessBookCommand($book, $this->getUser());
         $form = $this->createForm(ProcessBookFormType::class, $command);
         $form->handleRequest($request);

@@ -3,7 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Book;
+use App\Entity\Note;
+use App\Entity\Payment;
 use App\Entity\Role;
+use App\Entity\User;
 use App\Helper\Orm;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Security;
@@ -12,6 +15,9 @@ abstract class BaseController extends AbstractController
 {
     private $security;
     protected $bookRepo;
+    protected $userRepo;
+    protected $paymentRepo;
+    protected $noteRepo;
     protected $admin = false;
     protected $agent = false;
     protected $author = false;
@@ -27,6 +33,21 @@ abstract class BaseController extends AbstractController
     public function getBookRepository()
     {
         return $this->bookRepo = $this->getDoctrine()->getManager()->getRepository(Book::class);
+    }
+
+    public function getUserRepository()
+    {
+        return $this->userRepo = $this->getDoctrine()->getManager()->getRepository(User::class);
+    }
+
+    public function getPaymentRepository()
+    {
+        return $this->paymentRepo = $this->getDoctrine()->getManager()->getRepository(Payment::class);
+    }
+
+    public function getNoteRepository()
+    {
+        return $this->noteRepo = $this->getDoctrine()->getManager()->getRepository(Note::class);
     }
 
     public function isAdmin()

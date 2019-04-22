@@ -18,4 +18,15 @@ class NoteRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Note::class);
     }
+
+    public function findNonFeedbackNotes()
+    {
+        return $this->createQueryBuilder('n')
+            ->andWhere('n.noteType not in (:reviewer, :editor)')
+            ->setParameter('reviewer', Note::REVIEWER_FEEDBACK_TYPE)
+            ->setParameter('editor', Note::EDITOR_FEEDBACK_TYPE)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
 }

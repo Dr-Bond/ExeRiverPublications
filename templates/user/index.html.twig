@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Users{% endblock %}
+{% block body %}
+    <h1>Users</h1>
+    {% if is_granted('ROLE_ADMIN')%}
+        <a href="{{ path('create_user')}}" class="btn btn-success"><i class="fas fa-plus"></i> Create User</a>
+    {% endif %}
+    <table class="table" style="margin-top: 1%;">
+        <thead>
+        <tr>
+            <th scope="col">User ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Roles</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <th>{{ user.userId }}</th>
+                <td>{{ user }}</td>
+                <td>{{ user.roles|join(', ') }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

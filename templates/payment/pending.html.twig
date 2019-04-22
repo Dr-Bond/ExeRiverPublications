@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Payments{% endblock %}
+{% block body %}
+    <h1>Payments</h1>
+    <h3>{{ title|default('Pending') }}</h3>
+    <table class="table" style="margin-top: 1%;">
+        <thead>
+        <tr>
+            <th scope="col">Payment Type</th>
+            <th scope="col">Payment Made By</th>
+            <th scope="col">Amount</th>
+            <th scope="col">Status</th>
+            <th scope="col">Payment Date</th>
+            <th scope="col">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for payment in payments %}
+            <tr>
+                <th>{{ payment.paymentType }}</th>
+                <td>{{ payment.paymentMadeBy }}</td>
+                <td>£{{ payment.amount }}</td>
+                <td>{{ payment.status }}</td>
+                <td>{{ payment.paidOn|date("m/d/Y") }}</td>
+                {% if is_granted('ROLE_ADMIN') and payment.status == 'Pending Approval' %}
+                    <td><a href="{{ path('approve_payment', {'payment': payment.id }) }}" class="btn btn-success"><i class="fas fa-check"></i> Approve</a></td>
+                {% else %}
+                    <td>N/A</td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -28,6 +28,8 @@ class ManuscriptController extends BaseController
      */
     public function upload(Book $book, Request $request, MessageBusInterface $bus)
     {
+        $this->denyAccessUnlessGranted('ROLE_AUTHOR');
+
         $command = new UploadManuscriptCommand();
         $command->setBook($book);
         $form = $this->createForm(UploadManuscriptFormType::class, $command);

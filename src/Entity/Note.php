@@ -38,10 +38,9 @@ class Note
     private $noteType;
 
     const REVIEWER_FEEDBACK_TYPE = 'Reviewer Feedback';
-    const EDITOR_FEEDBACK_TYPE = 'Reviewer Feedback';
+    const EDITOR_FEEDBACK_TYPE = 'Editor Feedback';
     const MEETING_NOTE_TYPE = 'Meeting Note';
     const PHONE_CALL_NOTE_TYPE = 'Phone Call Note';
-    const PAYMENT_TYPE = 'Payment';
 
     public function __construct(Book $book, User $addedBy, string $content, string $noteType)
     {

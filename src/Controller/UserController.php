@@ -16,10 +16,12 @@ class UserController extends BaseController
 {
 
     /**
-     * @Route("/user/create", name="createUser")
+     * @Route("/user/create", name="create_user")
      */
     public function createUser(Request $request, MessageBusInterface $bus)
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $command = new CreateUserCommand();
 
         $form = $this->createForm(CreateUserFormType::class, $command);
@@ -27,6 +29,7 @@ class UserController extends BaseController
         if ($form->isSubmitted() && $form->isValid()) {
             $command->setPlainPassword($form->get('plainPassword')->getData());
             $bus->dispatch($command);
+            return $this->redirect($this->generateUrl('users'));
         }
         return $this->render('user/createUser.html.twig', [
             'form' => $form->createView(),
@@ -53,8 +56,24 @@ class UserController extends BaseController
      */
     public function clearNotification(Notification $notification, MessageBusInterface $bus)
     {
+        $this->denyAccessUnlessGranted(['ROLE_AUTHOR','ROLE_AGENT']);
+
         $command = new ClearNotificationCommand($notification);
         $bus->dispatch($command);
         return $this->redirect($this->generateUrl('books'));
+    }
+
+    /**
+     * @Route("/users", name="users")
+     */
+    public function users()
+    {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
+        $users = $this->getUserRepository()->findAll();
+
+        return $this->render('user/index.html.twig', [
+            'users' => $users,
+        ]);
     }
 }

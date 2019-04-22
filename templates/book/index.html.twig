@@ -4,7 +4,10 @@
 {% block body %}
     <h1>Books</h1>
     <h3>{{ subHeading }}</h3>
-    <table class="table">
+    {% if is_granted('ROLE_ADMIN')  %}
+        <a href="{{ path('add_book') }}" class="btn btn-success"><i class="fas fa-plus"></i> Add Book</a>
+    {% endif %}
+    <table class="table" style="margin-top: 1%;">
         <thead>
         <tr>
             <th scope="col">Reference</th>
@@ -38,7 +41,7 @@
                 <td>{{ book.editorRating }}</td>
                 <td>{{ book.status }}</td>
                 <td><div class="btn-group">
-                    {% if is_granted('ROLE_AGENT') or is_granted('ROLE_AUTHOR') and (book.status not in ['Pending Review','Accepted','Published']) %}
+                    {% if is_granted('ROLE_AUTHOR') and (book.status not in ['Pending Review','Accepted','Published']) %}
                         <a href="{{ path('manuscript_upload', {'book': book.id }) }}" class="btn btn-primary"><i class="fas fa-upload"></i> Upload</a>
                     {% endif %}
                     {% if is_granted('ROLE_REVIEWER') and (( app.user == book.mainReviewer and book.mainReviewerRating is null) or (app.user == book.secondaryReviewer and book.secondaryReviewerRating is null)) %}
