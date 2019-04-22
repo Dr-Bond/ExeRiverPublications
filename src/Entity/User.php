@@ -66,6 +66,11 @@ class User implements UserInterface
      */
     private $payments;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Notification", mappedBy="user", orphanRemoval=true)
+     */
+    private $notifications;
+
     public function __construct($firstName, $surname)
     {
         $this->firstName = $firstName;
@@ -74,6 +79,7 @@ class User implements UserInterface
         $this->books = new ArrayCollection();
         $this->notes = new ArrayCollection();
         $this->payments = new ArrayCollection();
+        $this->notifications = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -222,4 +228,13 @@ class User implements UserInterface
 
         return $this;
     }
+
+    /**
+     * @return Collection|Notification[]
+     */
+    public function getNotifications(): Collection
+    {
+        return $this->notifications;
+    }
+
 }

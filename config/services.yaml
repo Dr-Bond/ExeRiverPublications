@@ -41,3 +41,8 @@ services:
 
     App\Helper\Orm:
         arguments: ['@doctrine.orm.entity_manager']
+
+    exe_river.subscriber.notifications:
+        class: App\EventListener\NotificationSubscriber
+        tags:
+        - { name: kernel.event_subscriber }

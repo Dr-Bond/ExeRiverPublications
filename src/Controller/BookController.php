@@ -8,6 +8,7 @@ use App\Command\ProcessBookCommand;
 use App\Command\ReviewBookCommand;
 use App\Command\SearchBookCommand;
 use App\Entity\Book;
+use App\EventListener\NotificationEvent;
 use App\Form\AddBookFormType;
 use App\Form\AssignEditorFormType;
 use App\Form\ProcessBookFormType;
@@ -32,6 +33,10 @@ class BookController extends BaseController
      */
     public function index()
     {
+        $user = $this->getUser();
+        $userEvent = new NotificationEvent($user);
+        $user = $this->get('event_dispatcher')->dispatch('user.book_added', $userEvent)->getUser();
+
         if ($this->isAdmin()) {
             $books = $this->getBookRepository()->findAll();
             $subHeading = 'All Books';

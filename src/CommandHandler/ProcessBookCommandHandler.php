@@ -5,15 +5,19 @@ namespace App\CommandHandler;
 use App\Command\ProcessBookCommand;
 use App\Entity\Note;
 use App\Entity\Payment;
+use App\EventListener\NotificationEvent;
 use App\Helper\Orm;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ProcessBookCommandHandler
 {
     private $orm;
+    private $eventDispatcher;
 
-    public function __construct(Orm $orm)
+    public function __construct(Orm $orm, EventDispatcherInterface $eventDispatcher)
     {
         $this->orm = $orm;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     public function __invoke(ProcessBookCommand $command)
@@ -41,5 +45,8 @@ class ProcessBookCommandHandler
         $orm->persist($note);
         $orm->persist($book);
         $orm->flush();
+
+        $notification = new NotificationEvent($command->getUser(), $command->getBook());
+        $this->eventDispatcher->dispatch(NotificationEvent::BOOK_STATUS_CHANGE_EVENT, $notification);
     }
 }

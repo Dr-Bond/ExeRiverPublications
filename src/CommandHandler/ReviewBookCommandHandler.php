@@ -6,15 +6,19 @@ use App\Command\ReviewBookCommand;
 use App\Entity\Book;
 use App\Entity\Note;
 use App\Entity\Payment;
+use App\EventListener\NotificationEvent;
 use App\Helper\Orm;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ReviewBookCommandHandler
 {
     private $orm;
+    private $eventDispatcher;
 
-    public function __construct(Orm $orm)
+    public function __construct(Orm $orm, EventDispatcherInterface $eventDispatcher)
     {
         $this->orm = $orm;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     public function __invoke(ReviewBookCommand $command)
@@ -46,9 +50,11 @@ class ReviewBookCommandHandler
             );
             $orm->persist($payment);
         }
-
         $orm->persist($note);
         $orm->persist($book);
         $orm->flush();
+
+        $notification = new NotificationEvent($command->getUser(), $command->getBook());
+        $this->eventDispatcher->dispatch(NotificationEvent::BOOK_STATUS_CHANGE_EVENT, $notification);
     }
 }
