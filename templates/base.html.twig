@@ -12,15 +12,47 @@
 <body>
 {% block header %}
 <header style="padding-bottom: 2%">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">Exe River Publications</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav">
+    {% if app.request.get('_route') != 'login' %}
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="{{ path('books')}}">Exe River Publications</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_REVIEWER') or is_granted('ROLE_EDITOR')%}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('search_book')}}">Search</a>
+                        </li>
+                    {% endif %}
+                    {% if is_granted('ROLE_AUTHOR') or is_granted('ROLE_AGENT') %}
+                        {% if app.user.notifications|length < 1 %}
+                            <li class="nav-item">
+                                <a class="nav-link disabled" href="#">
+                                    <i class="fas fa-bell"></i>
+                                    <span class="label label-warning">{{ app.user.notifications|length }}</span>
+                                    Notifications
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-bell"></i>
+                                    <span class="label label-warning">{{ app.user.notifications|length }}</span>
+                                    Notifications
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    {%  for notification in app.user.notifications %}
+                                    <a class="dropdown-item" href="{{ path('clear_notification', {'notification': notification.id }) }}"><i class="fas fa-times"></i> {{ notification.content }}</a>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                    </li>
+                </ul>
             </div>
-        </div>
+        </nav>
+    {% endif %}
 </header>
 {% endblock %}
 <div class="container body-container">

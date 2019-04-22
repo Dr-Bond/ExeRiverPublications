@@ -39,6 +39,9 @@ services:
     App\CommandHandler\SearchBookCommandHandler:
         tags: ['messenger.message_handler']
 
+    App\CommandHandler\ClearNotificationCommandHandler:
+        tags: ['messenger.message_handler']
+
     App\Helper\Orm:
         arguments: ['@doctrine.orm.entity_manager']
 

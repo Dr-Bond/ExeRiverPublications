@@ -33,10 +33,6 @@ class BookController extends BaseController
      */
     public function index()
     {
-        $user = $this->getUser();
-        $userEvent = new NotificationEvent($user);
-        $user = $this->get('event_dispatcher')->dispatch('user.book_added', $userEvent)->getUser();
-
         if ($this->isAdmin()) {
             $books = $this->getBookRepository()->findAll();
             $subHeading = 'All Books';

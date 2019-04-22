@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Command\ClearNotificationCommand;
 use App\Command\CreateUserCommand;
+use App\Entity\Notification;
 use App\Form\CreateUserFormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,7 +34,7 @@ class UserController extends BaseController
     }
 
     /**
-     * @Route("user/login", name="login")
+     * @Route("/user/login", name="login")
      */
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
@@ -44,5 +46,15 @@ class UserController extends BaseController
             'last_username' => $lastUsername,
             'error'         => $error,
         ]);
+    }
+
+    /**
+     * @Route("/user/clear-notification/{notification}", name="clear_notification")
+     */
+    public function clearNotification(Notification $notification, MessageBusInterface $bus)
+    {
+        $command = new ClearNotificationCommand($notification);
+        $bus->dispatch($command);
+        return $this->redirect($this->generateUrl('books'));
     }
 }
