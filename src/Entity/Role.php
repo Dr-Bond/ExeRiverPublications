@@ -52,7 +52,6 @@ class Role
     public function setUser(?user $user): self
     {
         $this->user = $user;
-
         return $this;
     }
 
@@ -64,7 +63,6 @@ class Role
     public function setRole(string $role): self
     {
         $this->role = $role;
-
         return $this;
     }
 }

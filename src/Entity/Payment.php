@@ -54,7 +54,7 @@ class Payment
      */
     private $status;
 
-    public function __construct(Book $book, User $paymentMadeBy, int $amount, string $paymentType)
+    public function __construct(Book $book, User $paymentMadeBy, float $amount, string $paymentType)
     {
         $this->book = $book;
         $this->paymentMadeBy = $paymentMadeBy;
@@ -76,7 +76,6 @@ class Payment
     public function setPaidOn(\DateTimeInterface $paidOn): self
     {
         $this->paidOn = $paidOn;
-
         return $this;
     }
 
@@ -88,7 +87,6 @@ class Payment
     public function setAmount(float $amount): self
     {
         $this->amount = $amount;
-
         return $this;
     }
 
@@ -100,7 +98,6 @@ class Payment
     public function setPaymentType(string $paymentType): self
     {
         $this->paymentType = $paymentType;
-
         return $this;
     }
 
@@ -112,7 +109,6 @@ class Payment
     public function setPaymentMadeBy(?User $paymentMadeBy): self
     {
         $this->paymentMadeBy = $paymentMadeBy;
-
         return $this;
     }
 
@@ -124,7 +120,6 @@ class Payment
     public function setBook(?Book $book): self
     {
         $this->book = $book;
-
         return $this;
     }
 
@@ -136,7 +131,6 @@ class Payment
     public function setStatus(string $status): self
     {
         $this->status = $status;
-
         return $this;
     }
 

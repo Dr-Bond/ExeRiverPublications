@@ -98,11 +98,6 @@ class User implements UserInterface
         return $this;
     }
 
-    /**
-     * A visual identifier that represents this user.
-     *
-     * @see UserInterface
-     */
     public function getUsername(): string
     {
         return (string) $this->userId;
@@ -141,24 +136,14 @@ class User implements UserInterface
         return $this;
     }
 
-    /**
-     * Return null - salt not used in password creation
-     *
-     * {@inheritdoc}
-     */
     public function getSalt(): ?string
     {
         return null;
     }
-    /**
-     * Clear plain password.
-     *
-     * {@inheritdoc}
-     */
+
     public function eraseCredentials(): void
     {
-        // if you had a plainPassword property, you'd nullify it here
-        // $this->plainPassword = null;
+
     }
 
     /**
@@ -173,7 +158,6 @@ class User implements UserInterface
     {
         return $this->address;
     }
-
 
     public function getRoles(): array
     {
@@ -211,19 +195,6 @@ class User implements UserInterface
         if (!$this->payments->contains($payment)) {
             $this->payments[] = $payment;
             $payment->setPaymentMadeBy($this);
-        }
-
-        return $this;
-    }
-
-    public function removePayment(Payment $payment): self
-    {
-        if ($this->payments->contains($payment)) {
-            $this->payments->removeElement($payment);
-            // set the owning side to null (unless already changed)
-            if ($payment->getPaymentMadeBy() === $this) {
-                $payment->setPaymentMadeBy(null);
-            }
         }
 
         return $this;

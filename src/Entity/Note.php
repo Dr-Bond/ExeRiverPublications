@@ -63,7 +63,6 @@ class Note
     public function setBook(?Book $book): self
     {
         $this->book = $book;
-
         return $this;
     }
 
@@ -75,7 +74,6 @@ class Note
     public function setAddedBy(?User $addedBy): self
     {
         $this->addedBy = $addedBy;
-
         return $this;
     }
 
@@ -87,7 +85,6 @@ class Note
     public function setContent(string $content): self
     {
         $this->content = $content;
-
         return $this;
     }
 
@@ -99,7 +96,6 @@ class Note
     public function setNoteType(string $noteType): self
     {
         $this->noteType = $noteType;
-
         return $this;
     }
 }

@@ -283,7 +283,6 @@ class Book
     public function revisionCount(): ?int
     {
         return   count($this->getManuscripts());
-
     }
 
     /**
@@ -354,7 +353,6 @@ class Book
     public function setEditorRating(?int $editorRating): self
     {
         $this->editorRating = $editorRating;
-
         return $this;
     }
 

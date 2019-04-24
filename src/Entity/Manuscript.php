@@ -100,7 +100,6 @@ class Manuscript
     public function setName(string $name): self
     {
         $this->name = $name;
-
         return $this;
     }
 
@@ -112,7 +111,6 @@ class Manuscript
     public function setLocation($location)
     {
         $this->location = $location;
-
         return $this;
     }
 
@@ -124,7 +122,6 @@ class Manuscript
     public function setStatus(string $status): self
     {
         $this->status = $status;
-
         return $this;
     }
 
@@ -136,7 +133,6 @@ class Manuscript
     public function setUploadedOn(\DateTimeInterface $uploadedOn): self
     {
         $this->uploadedOn = $uploadedOn;
-
         return $this;
     }
 
@@ -148,7 +144,6 @@ class Manuscript
     public function setRevisionNumber(int $revisionNumber): self
     {
         $this->revisionNumber = $revisionNumber;
-
         return $this;
     }
 
@@ -160,7 +155,6 @@ class Manuscript
     public function setBook(?Book $book): self
     {
         $this->book = $book;
-
         return $this;
     }
 
