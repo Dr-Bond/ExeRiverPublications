@@ -275,18 +275,6 @@ class Book
         return $this;
     }
 
-    public function removeManuscript(Manuscript $manuscript): self
-    {
-        if ($this->manuscripts->contains($manuscript)) {
-            $this->manuscripts->removeElement($manuscript);
-            if ($manuscript->getBook() === $this) {
-                $manuscript->setBook(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function __toString()
     {
         return $this->name;
@@ -304,29 +292,6 @@ class Book
     public function getNotes(): Collection
     {
         return $this->notes;
-    }
-
-    public function addNote(Note $note): self
-    {
-        if (!$this->notes->contains($note)) {
-            $this->notes[] = $note;
-            $note->setBook($this);
-        }
-
-        return $this;
-    }
-
-    public function removeNote(Note $note): self
-    {
-        if ($this->notes->contains($note)) {
-            $this->notes->removeElement($note);
-            // set the owning side to null (unless already changed)
-            if ($note->getBook() === $this) {
-                $note->setBook(null);
-            }
-        }
-
-        return $this;
     }
 
     public function review(User $user, string $status, int $rating)
