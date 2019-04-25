@@ -14,11 +14,19 @@ use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
+/**
+ * Class UserController
+ * @package App\Controller
+ */
 class UserController extends BaseController
 {
 
     /**
      * @Route("/user/create", name="create_user")
+     * @param Request $request
+     * @param MessageBusInterface $bus
+     * @return mixed \Symfony\Component\HttpFoundation\RedirectResponse \Symfony\Bundle\FrameworkBundle\Controller\ControllerTrait
+     *  Admin access only, allows the admin to create a user, due to how the password is protected, the password is set on the command inside the controller.
      */
     public function createUser(Request $request, MessageBusInterface $bus)
     {
@@ -40,6 +48,9 @@ class UserController extends BaseController
 
     /**
      * @Route("/user/login", name="login")
+     * @param AuthenticationUtils $authenticationUtils
+     * @return mixed  \Symfony\Bundle\FrameworkBundle\Controller\ControllerTrait
+     *  Using login process using symfony's AuthenticationUtil.
      */
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
@@ -55,6 +66,10 @@ class UserController extends BaseController
 
     /**
      * @Route("/user/clear-notification/{notification}", name="clear_notification")
+     * @param Notification $notification
+     * @param MessageBusInterface $bus
+     * @return mixed \Symfony\Bundle\FrameworkBundle\Controller\ControllerTrait
+     *  Author and Agent access only, allows deleting of notifications.
      */
     public function clearNotification(Notification $notification, MessageBusInterface $bus)
     {
@@ -67,6 +82,10 @@ class UserController extends BaseController
 
     /**
      * @Route("/user/delete/{user}", name="delete_user")
+     * @param User $user
+     * @param MessageBusInterface $bus
+     * @return mixed \Symfony\Bundle\FrameworkBundle\Controller\ControllerTrait
+     *  Admin access only, allows deleting of the user.
      */
     public function deleteUser(User $user, MessageBusInterface $bus)
     {
@@ -79,6 +98,8 @@ class UserController extends BaseController
 
     /**
      * @Route("/users", name="users")
+     * @return mixed \Symfony\Bundle\FrameworkBundle\Controller\ControllerTrait
+     *  Admin access only, lists all users.
      */
     public function users()
     {

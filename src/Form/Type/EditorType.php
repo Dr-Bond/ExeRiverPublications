@@ -9,8 +9,15 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Class EditorType
+ * @package App\Form\Type
+ */
 class EditorType extends AbstractType
 {
+    /**
+     * @param OptionsResolver $resolver
+     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
@@ -24,6 +31,9 @@ class EditorType extends AbstractType
         ]);
     }
 
+    /**
+     * @return null|string
+     */
     public function getParent()
     {
         return EntityType::class;

@@ -14,11 +14,19 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class NoteRepository extends ServiceEntityRepository
 {
+    /**
+     * NoteRepository constructor.
+     * @param RegistryInterface $registry
+     */
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Note::class);
     }
 
+    /**
+     * @return mixed
+     * Finds all non feedback notes.
+     */
     public function findNonFeedbackNotes()
     {
         return $this->createQueryBuilder('n')

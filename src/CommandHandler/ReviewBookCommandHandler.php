@@ -10,17 +10,39 @@ use App\EventListener\NotificationEvent;
 use App\Helper\Orm;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
+/**
+ * Class ReviewBookCommandHandler
+ * @package App\CommandHandler
+ */
 class ReviewBookCommandHandler
 {
+    /**
+     * @var Orm
+     */
     private $orm;
+    /**
+     * @var EventDispatcherInterface
+     */
     private $eventDispatcher;
 
+    /**
+     * ReviewBookCommandHandler constructor.
+     * @param Orm $orm
+     * @param EventDispatcherInterface $eventDispatcher
+     */
     public function __construct(Orm $orm, EventDispatcherInterface $eventDispatcher)
     {
         $this->orm = $orm;
         $this->eventDispatcher = $eventDispatcher;
     }
 
+    /**
+     * @param ReviewBookCommand $command
+     * Creates a note object with the type of  REVIEWER_FEEDBACK_TYPE.
+     * Updates the book status and rating when processed.
+     * Creates a payment.
+     * Event listener creates a user notification to inform them of a status change.
+     */
     public function __invoke(ReviewBookCommand $command)
     {
         $orm = $this->orm;

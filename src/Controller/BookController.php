@@ -13,6 +13,10 @@ use App\Form\AssignEditorFormType;
 use App\Form\ProcessBookFormType;
 use App\Form\ReviewBookFormType;
 use App\Form\SearchBookFormType;
+use phpDocumentor\Reflection\Types\Void_;
+use Symfony\Bundle\FrameworkBundle\Controller\ControllerTrait;
+use Symfony\Component\Form\FormFactory;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -22,6 +26,10 @@ use Symfony\Component\Security\Core\Security;
 
 class BookController extends BaseController
 {
+    /**
+     * BookController constructor.
+     * @param Security $security
+     */
     public function __construct(Security $security)
     {
         parent::__construct($security);
@@ -29,6 +37,8 @@ class BookController extends BaseController
 
     /**
      * @Route("/books", name="books")
+     * Main homepage for most redirects and redirect after login.
+     * Books which are shown are dependent on user role
      */
     public function index()
     {
@@ -58,8 +68,12 @@ class BookController extends BaseController
 
     /**
      * @Route("/book/add", name="add_book")
+     * @param Request $request
+     * @param MessageBusInterface $bus
+     * @return mixed \Symfony\Component\HttpFoundation\RedirectResponse \Symfony\Bundle\FrameworkBundle\Controller\ControllerTrait
+     * Admin access only, allows adding of the book.
      */
-    public function upload(Request $request, MessageBusInterface $bus)
+    public function add(Request $request, MessageBusInterface $bus)
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
@@ -80,6 +94,11 @@ class BookController extends BaseController
 
     /**
      * @Route("/book/search", name="search_book")
+     * @param Request $request
+     * @param MessageBusInterface $bus
+     * @return mixed \Symfony\Bundle\FrameworkBundle\Controller\ControllerTrait
+     * Admin access only, allows adding of the book.
+     *  Admin, Reviewer and Editor only, allows searching for book by status.
      */
     public function search(Request $request, MessageBusInterface $bus)
     {
@@ -107,6 +126,11 @@ class BookController extends BaseController
 
     /**
      * @Route("/book/review/{book}", name="review_book")
+     * @param Book $book
+     * @param Request $request
+     * @param MessageBusInterface $bus
+     * @return mixed \Symfony\Component\HttpFoundation\RedirectResponse \Symfony\Bundle\FrameworkBundle\Controller\ControllerTrait
+     * Admin access only, allows adding of the book.
      */
     public function review(Book $book, Request $request, MessageBusInterface $bus)
     {
@@ -129,6 +153,11 @@ class BookController extends BaseController
 
     /**
      * @Route("/book/assign-editor/{book}", name="assign_editor_book")
+     * @param Book $book
+     * @param Request $request
+     * @param MessageBusInterface $bus
+     * @return mixed \Symfony\Component\HttpFoundation\RedirectResponse \Symfony\Bundle\FrameworkBundle\Controller\ControllerTrait
+     * Admin access only, assigns the editor.
      */
     public function assignEditor(Book $book, Request $request, MessageBusInterface $bus)
     {
@@ -151,6 +180,11 @@ class BookController extends BaseController
 
     /**
      * @Route("/book/process/{book}", name="process_book")
+     * @param Book $book
+     * @param Request $request
+     * @param MessageBusInterface $bus
+     * @return mixed \Symfony\Component\HttpFoundation\RedirectResponse \Symfony\Bundle\FrameworkBundle\Controller\ControllerTrait
+     *  Editor access only to process the book.
      */
     public function processBook(Book $book, Request $request, MessageBusInterface $bus)
     {

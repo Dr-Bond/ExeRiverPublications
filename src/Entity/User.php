@@ -71,6 +71,11 @@ class User implements UserInterface
      */
     private $notifications;
 
+    /**
+     * User constructor.
+     * @param $firstName
+     * @param $surname
+     */
     public function __construct($firstName, $surname)
     {
         $this->firstName = $firstName;
@@ -82,65 +87,105 @@ class User implements UserInterface
         $this->notifications = new ArrayCollection();
     }
 
+    /**
+     * @return int|null
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * @return null|string
+     */
     public function getUserId(): ?string
     {
         return $this->userId;
     }
 
+    /**
+     * @param string $userId
+     * @return User
+     */
     public function setUserId(string $userId): self
     {
         $this->userId = $userId;
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getUsername(): string
     {
         return (string) $this->userId;
     }
 
+    /**
+     * @return string
+     */
     public function getPassword(): string
     {
         return (string) $this->password;
     }
 
+    /**
+     * @param string $password
+     * @return User
+     */
     public function setPassword(string $password): self
     {
         $this->password = $password;
         return $this;
     }
 
+    /**
+     * @return null|string
+     */
     public function getFirstName(): ?string
     {
         return $this->firstName;
     }
 
+    /**
+     * @param string $firstName
+     * @return User
+     */
     public function setFirstName(string $firstName): self
     {
         $this->firstName = $firstName;
         return $this;
     }
 
+    /**
+     * @return null|string
+     */
     public function getSurname(): ?string
     {
         return $this->surname;
     }
 
+    /**
+     * @param string $surname
+     * @return User
+     */
     public function setSurname(string $surname): self
     {
         $this->surname = $surname;
         return $this;
     }
 
+    /**
+     * @return null|string
+     */
     public function getSalt(): ?string
     {
         return null;
     }
 
+    /**
+     *
+     */
     public function eraseCredentials(): void
     {
 
@@ -154,11 +199,17 @@ class User implements UserInterface
         return $this->books;
     }
 
+    /**
+     * @return Address|null
+     */
     public function getAddress(): ?Address
     {
         return $this->address;
     }
 
+    /**
+     * @return array
+     */
     public function getRoles(): array
     {
         $roles[] = 'ROLE_USER';
@@ -169,6 +220,9 @@ class User implements UserInterface
         return array_unique($roles);
     }
 
+    /**
+     * @return string
+     */
     public function __toString(): string
     {
         return $this->firstName.' '.$this->surname;
@@ -188,16 +242,6 @@ class User implements UserInterface
     public function getPayments(): Collection
     {
         return $this->payments;
-    }
-
-    public function addPayment(Payment $payment): self
-    {
-        if (!$this->payments->contains($payment)) {
-            $this->payments[] = $payment;
-            $payment->setPaymentMadeBy($this);
-        }
-
-        return $this;
     }
 
     /**

@@ -2,14 +2,20 @@
 
 namespace App\Form\Type;
 
-use App\Entity\Book;
 use App\Entity\Note;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Class NoteType
+ * @package App\Form\Type
+ */
 class NoteType extends AbstractType
 {
+    /**
+     * @param OptionsResolver $resolver
+     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $notes = [
@@ -24,6 +30,9 @@ class NoteType extends AbstractType
         ]);
     }
 
+    /**
+     * @return null|string
+     */
     public function getParent()
     {
         return ChoiceType::class;

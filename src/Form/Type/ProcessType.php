@@ -7,8 +7,15 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Class ProcessType
+ * @package App\Form\Type
+ */
 class ProcessType extends AbstractType
 {
+    /**
+     * @param OptionsResolver $resolver
+     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $choices = [
@@ -23,6 +30,9 @@ class ProcessType extends AbstractType
         ]);
     }
 
+    /**
+     * @return null|string
+     */
     public function getParent()
     {
         return ChoiceType::class;

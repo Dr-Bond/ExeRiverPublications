@@ -10,10 +10,25 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Manuscript
 {
+    /**
+     * Pending Review Status
+     */
     const PENDING_REVIEW = 'Pending Review';
+    /**
+     * Accepted Status
+     */
     const ACCEPTED_STATUS = 'Accepted';
+    /**
+     * Rejected Status
+     */
     const REJECTED_STATUS = 'Rejected';
+    /**
+     * Revision Required Status
+     */
     const REVISION_REQUIRED_STATUS = 'Revision Required';
+    /**
+     * Published Status
+     */
     const PUBLISHED_STATUS = 'Published';
 
     /**
@@ -61,6 +76,12 @@ class Manuscript
      */
     private $book;
 
+    /**
+     * Manuscript constructor.
+     * @param string $name
+     * @param string $location
+     * @param Book $book
+     */
     public function __construct(string $name, string $location, Book $book)
     {
         $revision = $book->revisionCount();
@@ -75,16 +96,26 @@ class Manuscript
 
     }
 
+    /**
+     * @return int|null
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * @return null|string
+     */
     public function getReference(): ?string
     {
         return $this->reference;
     }
 
+    /**
+     * @param string $reference
+     * @return Manuscript
+     */
     public function setReference(string $reference): self
     {
         $this->reference = $reference;
@@ -92,66 +123,108 @@ class Manuscript
         return $this;
     }
 
+    /**
+     * @return null|string
+     */
     public function getName(): ?string
     {
         return $this->name;
     }
 
+    /**
+     * @param string $name
+     * @return Manuscript
+     */
     public function setName(string $name): self
     {
         $this->name = $name;
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getLocation()
     {
         return $this->location;
     }
 
+    /**
+     * @param $location
+     * @return $this
+     */
     public function setLocation($location)
     {
         $this->location = $location;
         return $this;
     }
 
+    /**
+     * @return null|string
+     */
     public function getStatus(): ?string
     {
         return $this->status;
     }
 
+    /**
+     * @param string $status
+     * @return Manuscript
+     */
     public function setStatus(string $status): self
     {
         $this->status = $status;
         return $this;
     }
 
+    /**
+     * @return \DateTimeInterface|null
+     */
     public function getUploadedOn(): ?\DateTimeInterface
     {
         return $this->uploadedOn;
     }
 
+    /**
+     * @param \DateTimeInterface $uploadedOn
+     * @return Manuscript
+     */
     public function setUploadedOn(\DateTimeInterface $uploadedOn): self
     {
         $this->uploadedOn = $uploadedOn;
         return $this;
     }
 
+    /**
+     * @return int|null
+     */
     public function getRevisionNumber(): ?int
     {
         return $this->revisionNumber;
     }
 
+    /**
+     * @param int $revisionNumber
+     * @return Manuscript
+     */
     public function setRevisionNumber(int $revisionNumber): self
     {
         $this->revisionNumber = $revisionNumber;
         return $this;
     }
 
+    /**
+     * @return Book|null
+     */
     public function getBook(): ?Book
     {
         return $this->book;
     }
 
+    /**
+     * @param Book|null $book
+     * @return Manuscript
+     */
     public function setBook(?Book $book): self
     {
         $this->book = $book;

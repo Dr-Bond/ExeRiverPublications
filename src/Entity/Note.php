@@ -37,11 +37,30 @@ class Note
      */
     private $noteType;
 
+    /**
+     * Reviewer Feedback Note Type
+     */
     const REVIEWER_FEEDBACK_TYPE = 'Reviewer Feedback';
+    /**
+     * Editor Feedback Note Type
+     */
     const EDITOR_FEEDBACK_TYPE = 'Editor Feedback';
+    /**
+     * Meeting Note Note Type
+     */
     const MEETING_NOTE_TYPE = 'Meeting Note';
+    /**
+     * Phone Call Note Note Type
+     */
     const PHONE_CALL_NOTE_TYPE = 'Phone Call Note';
 
+    /**
+     * Note constructor.
+     * @param Book $book
+     * @param User $addedBy
+     * @param string $content
+     * @param string $noteType
+     */
     public function __construct(Book $book, User $addedBy, string $content, string $noteType)
     {
         $this->book = $book;
@@ -50,49 +69,80 @@ class Note
         $this->noteType = $noteType;
     }
 
+    /**
+     * @return int|null
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * @return Book|null
+     */
     public function getBook(): ?Book
     {
         return $this->book;
     }
 
+    /**
+     * @param Book|null $book
+     * @return Note
+     */
     public function setBook(?Book $book): self
     {
         $this->book = $book;
         return $this;
     }
 
+    /**
+     * @return User|null
+     */
     public function getAddedBy(): ?User
     {
         return $this->addedBy;
     }
 
+    /**
+     * @param User|null $addedBy
+     * @return Note
+     */
     public function setAddedBy(?User $addedBy): self
     {
         $this->addedBy = $addedBy;
         return $this;
     }
 
+    /**
+     * @return null|string
+     */
     public function getContent(): ?string
     {
         return $this->content;
     }
 
+    /**
+     * @param string $content
+     * @return Note
+     */
     public function setContent(string $content): self
     {
         $this->content = $content;
         return $this;
     }
 
+    /**
+     * @return null|string
+     */
     public function getNoteType(): ?string
     {
         return $this->noteType;
     }
 
+    /**
+     * @param string $noteType
+     * @return Note
+     */
     public function setNoteType(string $noteType): self
     {
         $this->noteType = $noteType;

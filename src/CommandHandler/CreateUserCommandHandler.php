@@ -9,17 +9,36 @@ use App\Entity\User;
 use App\Helper\Orm;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
+/**
+ * Class CreateUserCommandHandler
+ * @package App\CommandHandler
+ */
 class CreateUserCommandHandler
 {
+    /**
+     * @var Orm
+     */
     private $orm;
+    /**
+     * @var UserPasswordEncoderInterface
+     */
     private $passwordEncoder;
 
+    /**
+     * CreateUserCommandHandler constructor.
+     * @param Orm $orm
+     * @param UserPasswordEncoderInterface $passwordEncoder
+     */
     public function __construct(Orm $orm, UserPasswordEncoderInterface $passwordEncoder)
     {
         $this->orm = $orm;
         $this->passwordEncoder = $passwordEncoder;
     }
 
+    /**
+     * @param CreateUserCommand $command
+     * Creates a user, role and address object and encodes the password being flushing to database.
+     */
     public function __invoke(CreateUserCommand $command)
     {
         $orm = $this->orm;
@@ -43,6 +62,11 @@ class CreateUserCommandHandler
         $orm->flush();
     }
 
+    /**
+     * @param User $user
+     * @param array $address
+     * Create address function.
+     */
     private function addAddress(User $user, array $address)
     {
         $entity = new Address(
@@ -60,6 +84,11 @@ class CreateUserCommandHandler
         return;
     }
 
+    /**
+     * @param User $user
+     * @param string $role
+     * Function for creating the user role.
+     */
     private function addRole(User $user, string $role)
     {
         $entity = new Role(
@@ -70,6 +99,12 @@ class CreateUserCommandHandler
         return;
     }
 
+    /**
+     * @param User $user
+     * @param string $password
+     * @return string
+     * Function to encode the plain password
+     */
     private function encodePassword(User $user, string $password)
     {
         return $this->passwordEncoder->encodePassword(

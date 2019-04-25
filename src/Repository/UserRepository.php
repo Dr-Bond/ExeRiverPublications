@@ -14,11 +14,20 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class UserRepository extends ServiceEntityRepository
 {
+    /**
+     * UserRepository constructor.
+     * @param RegistryInterface $registry
+     */
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, User::class);
     }
 
+    /**
+     * @param $roles
+     * @return mixed
+     * Finds a user by their role.
+     */
     public function findByRoles($roles)
     {
         return $this->createQueryBuilder('u')

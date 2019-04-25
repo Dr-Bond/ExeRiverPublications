@@ -7,8 +7,15 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Class RoleType
+ * @package App\Form\Type
+ */
 class RoleType extends AbstractType
 {
+    /**
+     * @param OptionsResolver $resolver
+     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $roles = [
@@ -26,6 +33,9 @@ class RoleType extends AbstractType
         ]);
     }
 
+    /**
+     * @return null|string
+     */
     public function getParent()
     {
         return ChoiceType::class;

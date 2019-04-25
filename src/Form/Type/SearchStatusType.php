@@ -7,8 +7,15 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Class SearchStatusType
+ * @package App\Form\Type
+ */
 class SearchStatusType extends AbstractType
 {
+    /**
+     * @param OptionsResolver $resolver
+     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $choices = [
@@ -29,6 +36,9 @@ class SearchStatusType extends AbstractType
         ]);
     }
 
+    /**
+     * @return null|string
+     */
     public function getParent()
     {
         return ChoiceType::class;

@@ -14,11 +14,19 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class BookRepository extends ServiceEntityRepository
 {
+    /**
+     * BookRepository constructor.
+     * @param RegistryInterface $registry
+     */
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Book::class);
     }
 
+    /**
+     * @return array|mixed
+     * Returns all books and orders them by date.
+     */
     public function findAll()
     {
         return $this->createQueryBuilder('b')
@@ -28,6 +36,10 @@ class BookRepository extends ServiceEntityRepository
             ;
     }
 
+    /**
+     * @param User $user
+     * @return mixed
+     */
     public function findPendingReview(User $user)
     {
         return $this->createQueryBuilder('b')
@@ -42,6 +54,10 @@ class BookRepository extends ServiceEntityRepository
             ;
     }
 
+    /**
+     * @param User $user
+     * @return mixed
+     */
     public function findMyBooks(User $user)
     {
         return $this->createQueryBuilder('b')
@@ -53,6 +69,10 @@ class BookRepository extends ServiceEntityRepository
             ;
     }
 
+    /**
+     * @param User $user
+     * @return mixed
+     */
     public function findPendingEditorProcessing(User $user)
     {
         return $this->createQueryBuilder('b')
@@ -67,6 +87,10 @@ class BookRepository extends ServiceEntityRepository
             ;
     }
 
+    /**
+     * @param string $status
+     * @return mixed
+     */
     public function findByStatus(string $status)
     {
         return $this->createQueryBuilder('b')
