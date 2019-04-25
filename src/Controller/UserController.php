@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use App\Command\ClearNotificationCommand;
 use App\Command\CreateUserCommand;
+use App\Command\DeleteUserCommand;
 use App\Entity\Notification;
+use App\Entity\User;
 use App\Form\CreateUserFormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -61,6 +63,18 @@ class UserController extends BaseController
         $command = new ClearNotificationCommand($notification);
         $bus->dispatch($command);
         return $this->redirect($this->generateUrl('books'));
+    }
+
+    /**
+     * @Route("/user/delete/{user}", name="delete_user")
+     */
+    public function deleteUser(User $user, MessageBusInterface $bus)
+    {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
+        $command = new DeleteUserCommand($user);
+        $bus->dispatch($command);
+        return $this->redirect($this->generateUrl('users'));
     }
 
     /**

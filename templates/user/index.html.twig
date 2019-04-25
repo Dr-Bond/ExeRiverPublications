@@ -11,7 +11,11 @@
         <tr>
             <th scope="col">User ID</th>
             <th scope="col">Name</th>
+            <th scope="col">Address</th>
             <th scope="col">Roles</th>
+            {% if is_granted('ROLE_ADMIN') %}
+                <th scope="col">Action</th>
+            {% endif %}
         </tr>
         </thead>
         <tbody>
@@ -19,7 +23,18 @@
             <tr>
                 <th>{{ user.userId }}</th>
                 <td>{{ user }}</td>
+                <td>
+                    {% if user.address.addressLineOne %}{{ user.address.addressLineOne }}, {% endif %}
+                    {% if user.address.addressLineTwo %}{{ user.address.addressLineTwo }}, {% endif %}
+                    {% if user.address.city %}{{ user.address.city }}, {% endif %}
+                    {% if user.address.county %}{{ user.address.county }}, {% endif %}
+                    {% if user.address.postcode %}{{ user.address.postcode }}, {% endif %}
+                    {% if user.address.country %}{{ user.address.country }}{% endif %}
+                </td>
                 <td>{{ user.roles|join(', ') }}</td>
+                {% if is_granted('ROLE_ADMIN')%}
+                    <td><a href="{{ path('delete_user', {'user': user.id }) }}" class="btn btn-danger"><i class="fas fa-times"></i> Delete</a></td>
+                {% endif %}
             </tr>
         {% endfor %}
         </tbody>

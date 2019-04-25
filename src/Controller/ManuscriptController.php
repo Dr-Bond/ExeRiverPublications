@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Command\UploadManuscriptCommand;
 use App\Entity\Book;
+use App\Entity\Manuscript;
 use App\Form\UploadManuscriptFormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,6 +18,8 @@ class ManuscriptController extends BaseController
      */
     public function index(Book $book)
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
         return $this->render('manuscript/index.html.twig', array(
             'manuscripts' => $book->getManuscripts(),
             'book' => $book
@@ -47,4 +50,12 @@ class ManuscriptController extends BaseController
         }
     }
 
+    /**
+     * @Route("/manuscript/download/{manuscript}", name="manuscript_download")
+     */
+    public function download(Manuscript $manuscript)
+    {
+        $pdfPath = $this->getParameter('manuscript_directory').'/'.$manuscript->getLocation();
+        return $this->file($pdfPath);
+    }
 }

@@ -45,6 +45,9 @@ services:
     App\CommandHandler\ApprovePaymentCommandHandler:
         tags: ['messenger.message_handler']
 
+    App\CommandHandler\DeleteUserCommandHandler:
+        tags: ['messenger.message_handler']
+
     App\Helper\Orm:
         arguments: ['@doctrine.orm.entity_manager']
 

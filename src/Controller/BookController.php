@@ -32,6 +32,8 @@ class BookController extends BaseController
      */
     public function index()
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
         if ($this->isAdmin()) {
             $books = $this->getBookRepository()->findAll();
             $subHeading = 'All Books';
@@ -92,7 +94,6 @@ class BookController extends BaseController
             $handle = $bus->dispatch($command);
             $handlestamp = $handle->last(HandledStamp::class);
             $books = $handlestamp->getResult();
-            dump($books);
             return $this->render('book/search.html.twig', array(
                 'form' => $form->createView(),
                 'books' => $books

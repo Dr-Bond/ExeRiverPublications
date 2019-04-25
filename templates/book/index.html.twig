@@ -44,7 +44,7 @@
                     {% if is_granted('ROLE_AUTHOR') and (book.status not in ['Pending Review','Accepted','Published']) %}
                         <a href="{{ path('manuscript_upload', {'book': book.id }) }}" class="btn btn-primary"><i class="fas fa-upload"></i> Upload</a>
                     {% endif %}
-                    {% if is_granted('ROLE_REVIEWER') and (( app.user == book.mainReviewer and book.mainReviewerRating is null) or (app.user == book.secondaryReviewer and book.secondaryReviewerRating is null)) %}
+                    {% if is_granted('ROLE_REVIEWER') and (( app.user == book.mainReviewer or app.user == book.secondaryReviewer) and book.status in ['Pending Review','Pending Secondary Review'])  %}
                         <a href="{{ path('review_book', {'book': book.id }) }}" class="btn btn-primary"><i class="fas fa-star"></i> Review</a>
                     {% endif %}
                     {% if is_granted('ROLE_ADMIN') and book.status == 'Accepted' and book.editor == null %}

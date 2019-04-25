@@ -29,5 +29,6 @@ security:
         - { path: ^/user/create, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/user/clear-notification, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/manuscripts, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/manuscript/, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/note, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/payments, roles: IS_AUTHENTICATED_FULLY }

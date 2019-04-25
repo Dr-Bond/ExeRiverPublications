@@ -12,6 +12,7 @@
             <th scope="col">Created On</th>
             <th scope="col">Name</th>
             <th scope="col">Status</th>
+            <th scope="col">Download</th>
         </tr>
         </thead>
         <tbody>
@@ -22,6 +23,7 @@
                 <td>{{ manuscript.uploadedOn|date("m/d/Y") }}</td>
                 <td>{{ manuscript.name }}</td>
                 <td>{{ manuscript.status }}</td>
+                <td><a href="{{ path('manuscript_download', {'manuscript': manuscript.id }) }}" class="btn btn-secondary"><i class="fas fa-file-download"></i> Download</a></td>
             </tr>
         {% endfor %}
         </tbody>

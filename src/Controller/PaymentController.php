@@ -15,6 +15,8 @@ class PaymentController extends BaseController
      */
     public function index(Book $book)
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
         return $this->render('payment/index.html.twig', [
             'book' => $book
         ]);

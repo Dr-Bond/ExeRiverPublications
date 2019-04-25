@@ -16,6 +16,8 @@ class NoteController extends BaseController
      */
     public function index(Book $book)
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
         if($this->isAdmin()) {
             $notes = $this->getNoteRepository()->findNonFeedbackNotes();
         } else {
