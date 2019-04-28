@@ -41,7 +41,7 @@
                 <td>{{ book.editorRating }}</td>
                 <td>{{ book.status }}</td>
                 <td><div class="btn-group">
-                    {% if is_granted('ROLE_AUTHOR') and (book.status not in ['Pending Review','Accepted','Published']) %}
+                    {% if is_granted('ROLE_AUTHOR') and (book.status not in ['Pending Review','Accepted','Published', 'Rejected']) %}
                         <a href="{{ path('manuscript_upload', {'book': book.id }) }}" class="btn btn-primary"><i class="fas fa-upload"></i> Upload</a>
                     {% endif %}
                     {% if is_granted('ROLE_REVIEWER') and (( app.user == book.mainReviewer or app.user == book.secondaryReviewer) and book.status in ['Pending Review','Pending Secondary Review'])  %}
