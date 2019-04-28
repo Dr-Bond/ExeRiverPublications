@@ -20,10 +20,10 @@ interface OrmInterface
     public function createQueryBuilder();
 
     /**
-     * @param $objectClass
+     * @param $entity
      * @return mixed
      */
-    public function getRepository($objectClass);
+    public function getRepository($entity);
 
     /**
      * @param $object
